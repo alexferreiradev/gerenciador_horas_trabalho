@@ -1,9 +1,14 @@
 import React from 'react';
 
-import { Container } from './styles';
+import { Container, Resumo, ListaLancamento } from './styles';
 
 function Dashboard() {
-  return <Container>Dashboard</Container>;
+  return (
+    <Container>
+      <Resumo>Resumo de dados</Resumo>
+      <ListaLancamento>Lista de lancamentos</ListaLancamento>
+    </Container>
+  );
 }
 
 export default Dashboard;
