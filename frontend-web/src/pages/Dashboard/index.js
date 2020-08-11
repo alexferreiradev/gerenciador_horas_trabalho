@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import * as clipboard from 'clipboard-polyfill/text';
 import { formatHoraLancamento } from '../../util/index';
@@ -6,17 +6,7 @@ import { formatHoraLancamento } from '../../util/index';
 import { Container, Resumo, ListaLancamento } from './styles';
 
 function Dashboard() {
-  const [lancamentoList, setLancamentoList] = useState([
-    {
-      id: 1,
-      acao: 'teste',
-      hora: new Date(),
-      horaFormatted: formatHoraLancamento(new Date()),
-      intervalo: '10',
-      sistema: 'CRM',
-      os: '123',
-    },
-  ]);
+  const [lancamentoList, setLancamentoList] = useState([]);
   const [newLancamento, setNewLancamento] = useState({});
   const [editing, setEditing] = useState(false);
 
@@ -26,6 +16,40 @@ function Dashboard() {
     const horas = totalIntervalo / 60;
     return horas.toFixed(2);
   }, [lancamentoList]);
+
+  useEffect(() => {
+    function saveInStorage() {
+      if (lancamentoList && lancamentoList.length > 0) {
+        localStorage.setItem('lancamentos', JSON.stringify(lancamentoList));
+      }
+    }
+
+    saveInStorage();
+  }, [lancamentoList]);
+
+  useEffect(() => {
+    function loadFromStorage() {
+      const lancamentoListJson = localStorage.getItem('lancamentos');
+      const lancamentoListParsed = JSON.parse(lancamentoListJson);
+      if (lancamentoListParsed && lancamentoListParsed.length > 0) {
+        setLancamentoList(lancamentoListParsed);
+      } else {
+        setLancamentoList([
+          {
+            id: 1,
+            acao: 'inicio trabalho',
+            hora: new Date(),
+            horaFormatted: formatHoraLancamento(new Date()),
+            intervalo: '15',
+            sistema: 'CRM',
+            os: '123',
+          },
+        ]);
+      }
+    }
+
+    loadFromStorage();
+  }, []);
 
   function newLancamentoInvalid() {
     const { intervalo } = newLancamento;
@@ -112,6 +136,8 @@ function Dashboard() {
     }
   }
 
+  function handleLimpar() {}
+
   return (
     <Container>
       <Resumo>
@@ -128,6 +154,9 @@ function Dashboard() {
         </ul>
       </Resumo>
       <ListaLancamento>
+        <button type="button" onClick={() => handleLimpar()}>
+          Limpar
+        </button>
         <h1>Lista de lancamentos</h1>
         {lancamentoList.length === 0 && <span>Não há lancamentos</span>}
         {lancamentoList.map((lancamento) => (
