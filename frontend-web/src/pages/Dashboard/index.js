@@ -1,11 +1,116 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { toast } from 'react-toastify';
+import * as clipboard from 'clipboard-polyfill/text';
+import { formatHoraLancamento } from '../../util/index';
 
 import { Container, Resumo, ListaLancamento } from './styles';
 
 function Dashboard() {
   const [lancamentoList, setLancamentoList] = useState([
-    { id: 1, acao: 'teste' },
+    {
+      id: 1,
+      acao: 'teste',
+      hora: new Date(),
+      horaFormatted: formatHoraLancamento(new Date()),
+      intervalo: '10',
+      sistema: 'CRM',
+      os: '123',
+    },
   ]);
+  const [newLancamento, setNewLancamento] = useState({});
+  const [editing, setEditing] = useState(false);
+
+  const totalLancado = useMemo(() => {
+    const totalIntervalo =
+      lancamentoList.reduce((acc, current) => acc + current.intervalo, 0) || 0;
+    const horas = totalIntervalo / 60;
+    return horas.toFixed(2);
+  }, [lancamentoList]);
+
+  function newLancamentoInvalid() {
+    const { intervalo } = newLancamento;
+    if (intervalo == null || Number.isNaN(Number.parseInt(intervalo, 10)))
+      return true;
+    if (newLancamento.os == null) return true;
+    if (newLancamento.sistema == null) return true;
+    if (newLancamento.acao == null) return true;
+
+    return false;
+  }
+
+  function editLancamento() {
+    const lacamentoIndex = lancamentoList.findIndex(
+      (i) => i.id === newLancamento.id
+    );
+
+    if (lacamentoIndex >= 0) {
+      const newList = [...lancamentoList];
+      const newLancamentoModel = {
+        ...newLancamento,
+        hora: new Date(),
+        horaFormatted: formatHoraLancamento(new Date()),
+      };
+      newList[lacamentoIndex] = newLancamentoModel;
+      setLancamentoList(newList);
+      toast.success('Lancamento atualizado');
+    } else {
+      toast.error('Lancamento não foi encontrado');
+    }
+  }
+
+  function handleLancar() {
+    if (newLancamentoInvalid()) {
+      toast.warn('Preenchimento incorreto');
+      return;
+    }
+
+    if (editing) {
+      editLancamento();
+      setEditing(false);
+    } else {
+      let idAux = 0;
+      const lastLancamento = lancamentoList.find((i) => {
+        if (i.id > idAux) {
+          idAux = i.id;
+          return true;
+        }
+
+        return false;
+      });
+      const lastId = lastLancamento ? lastLancamento.id : 1;
+      const newLancamentoModel = {
+        ...newLancamento,
+        id: lastId + 1,
+        hora: new Date(),
+        horaFormatted: formatHoraLancamento(new Date()),
+      };
+      setLancamentoList([...lancamentoList, newLancamentoModel]);
+      setNewLancamento({ os: '', acao: '', intervalo: '', sistema: '' });
+      toast.success('Lancamento feito com sucesso');
+    }
+  }
+
+  function handleEdit(lancamentoEditing) {
+    setNewLancamento(lancamentoEditing);
+    setEditing(true);
+  }
+
+  function handleCopy(lancamento) {
+    clipboard.writeText(lancamento.acao);
+    toast.success('Acao copiada para área de transferência');
+  }
+
+  function handleDelete(lancamento) {
+    const lancamentoIndex = lancamentoList.findIndex(
+      (i) => i.id === lancamento.id
+    );
+
+    if (lancamentoIndex >= 0) {
+      const newList = [...lancamentoList];
+      newList.splice(lancamentoIndex, 1);
+      setLancamentoList(newList);
+    }
+  }
 
   return (
     <Container>
@@ -14,7 +119,7 @@ function Dashboard() {
         <ul>
           <li>
             <span>Total horas:</span>
-            {8}h
+            {totalLancado}h
           </li>
           <li>
             <span>Total OS:</span>
@@ -24,16 +129,64 @@ function Dashboard() {
       </Resumo>
       <ListaLancamento>
         <h1>Lista de lancamentos</h1>
-        {lancamentoList.lenght === 0 && <span>Não há lancamentos</span>}
+        {lancamentoList.length === 0 && <span>Não há lancamentos</span>}
         {lancamentoList.map((lancamento) => (
           <div key={lancamento.id}>
-            <span>15:00 - </span>
-            <span>16:00 - </span>
-            <span>1h - </span>
-            <span>OS#1234 - </span>
+            <span>
+              {lancamento.horaFormatted} {'=>'}{' '}
+            </span>
+            <span>{lancamento.intervalo}m - </span>
+            <span>OS#{lancamento.os} - </span>
+            <span>OS#{lancamento.sistema} - </span>
             <span>{lancamento.acao}</span>
+            <button type="button" onClick={() => handleEdit(lancamento)}>
+              Edit
+            </button>
+            <button type="button" onClick={() => handleCopy(lancamento)}>
+              Copy
+            </button>
+            <button type="button" onClick={() => handleDelete(lancamento)}>
+              Remover
+            </button>
           </div>
         ))}
+        <div>
+          <input
+            type="text"
+            value={newLancamento.intervalo}
+            placeholder="Minutos gastos na tarefa"
+            onChange={(e) =>
+              setNewLancamento({ ...newLancamento, intervalo: e.target.value })
+            }
+          />
+          <input
+            type="text"
+            value={newLancamento.os}
+            placeholder="número da OS"
+            onChange={(e) =>
+              setNewLancamento({ ...newLancamento, os: e.target.value })
+            }
+          />
+          <input
+            type="text"
+            value={newLancamento.sistema}
+            placeholder="Sistema"
+            onChange={(e) =>
+              setNewLancamento({ ...newLancamento, sistema: e.target.value })
+            }
+          />
+          <textarea
+            type="text"
+            value={newLancamento.acao}
+            placeholder="Ação realizada"
+            onChange={(e) =>
+              setNewLancamento({ ...newLancamento, acao: e.target.value })
+            }
+          />
+          <button type="button" onClick={(e) => handleLancar(e)}>
+            Lançado
+          </button>
+        </div>
       </ListaLancamento>
     </Container>
   );

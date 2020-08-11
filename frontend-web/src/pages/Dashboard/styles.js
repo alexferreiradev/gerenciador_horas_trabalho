@@ -32,5 +32,10 @@ export const ListaLancamento = styled.div`
   div {
     border: 1px solid #000;
     padding: 4px;
+
+    textarea {
+      min-width: 522px;
+      min-height: 100px;
+    }
   }
 `;
