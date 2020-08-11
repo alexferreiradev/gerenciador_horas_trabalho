@@ -9,10 +9,14 @@ function Dashboard() {
   const [lancamentoList, setLancamentoList] = useState([]);
   const [newLancamento, setNewLancamento] = useState({});
   const [editing, setEditing] = useState(false);
+  const emptyLancamento = { os: '', acao: '', intervalo: '', sistema: '' };
 
   const totalLancado = useMemo(() => {
     const totalIntervalo =
-      lancamentoList.reduce((acc, current) => acc + current.intervalo, 0) || 0;
+      lancamentoList.reduce(
+        (acc, current) => acc + Number.parseInt(current.intervalo, 10),
+        0
+      ) || 0;
     const horas = totalIntervalo / 60;
     return horas.toFixed(2);
   }, [lancamentoList]);
@@ -92,16 +96,13 @@ function Dashboard() {
       editLancamento();
       setEditing(false);
     } else {
-      let idAux = 0;
-      const lastLancamento = lancamentoList.find((i) => {
+      let idAux = -1;
+      lancamentoList.forEach((i) => {
         if (i.id > idAux) {
           idAux = i.id;
-          return true;
         }
-
-        return false;
       });
-      const lastId = lastLancamento ? lastLancamento.id : 1;
+      const lastId = idAux >= 0 ? idAux : 1;
       const newLancamentoModel = {
         ...newLancamento,
         id: lastId + 1,
@@ -109,7 +110,7 @@ function Dashboard() {
         horaFormatted: formatHoraLancamento(new Date()),
       };
       setLancamentoList([...lancamentoList, newLancamentoModel]);
-      setNewLancamento({ os: '', acao: '', intervalo: '', sistema: '' });
+      setNewLancamento(emptyLancamento);
       toast.success('Lancamento feito com sucesso');
     }
   }
@@ -137,6 +138,11 @@ function Dashboard() {
   }
 
   function handleLimpar() {}
+
+  function handleCancelar() {
+    setNewLancamento(emptyLancamento);
+    setEditing(false);
+  }
 
   return (
     <Container>
@@ -213,7 +219,10 @@ function Dashboard() {
             }
           />
           <button type="button" onClick={(e) => handleLancar(e)}>
-            Lançado
+            Lançar
+          </button>
+          <button type="button" onClick={(e) => handleCancelar(e)}>
+            Cancelar
           </button>
         </div>
       </ListaLancamento>
