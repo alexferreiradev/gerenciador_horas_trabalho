@@ -1,7 +1,11 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import * as clipboard from 'clipboard-polyfill/text';
-import { formatHoraLancamento } from '../../util/index';
+import { addMinutes } from 'date-fns';
+import { KeyboardTimePicker } from '@material-ui/pickers';
+import AsyncSelect from 'react-select/async';
+
+import { formatHoraLancamento, formatHoraMinuto } from '../../util/index';
 
 import { Container, Resumo, ListaLancamento } from './styles';
 
@@ -9,17 +13,32 @@ function Dashboard() {
   const [lancamentoList, setLancamentoList] = useState([]);
   const [newLancamento, setNewLancamento] = useState({});
   const [editing, setEditing] = useState(false);
+  const [horaInicio, setHoraInicio] = useState(new Date());
   const emptyLancamento = { os: '', acao: '', intervalo: '', sistema: '' };
 
-  const totalLancado = useMemo(() => {
-    const totalIntervalo =
+  const totalIntervalo = useMemo(() => {
+    return (
       lancamentoList.reduce(
         (acc, current) => acc + Number.parseInt(current.intervalo, 10),
         0
-      ) || 0;
-    const horas = totalIntervalo / 60;
-    return horas.toFixed(2);
+      ) || 0
+    );
   }, [lancamentoList]);
+  const totalLancado = useMemo(() => {
+    const horas = totalIntervalo / 60;
+    const hora = Number.parseInt(horas, 10);
+    const minuto = Math.round((horas - hora).toFixed(2) * 60);
+    return `${hora}h, ${minuto}m`;
+  }, [totalIntervalo]);
+  const horaFinal = useMemo(() => {
+    return addMinutes(horaInicio, totalIntervalo);
+  }, [totalIntervalo, horaInicio]);
+  const horaFinalFormatted = useMemo(() => {
+    return `${formatHoraMinuto(horaFinal)}`;
+  }, [horaFinal]);
+  const horaInicioFormatted = useMemo(() => formatHoraMinuto(horaInicio), [
+    horaInicio,
+  ]);
 
   useEffect(() => {
     function saveInStorage() {
@@ -150,8 +169,22 @@ function Dashboard() {
         <h1>Dashboard</h1>
         <ul>
           <li>
+            <span>Hora Inicio:</span>
+            <KeyboardTimePicker
+              value={horaInicio}
+              onChange={(dt) => setHoraInicio(dt)}
+              KeyboardButtonProps={{
+                'aria-label': 'change time',
+              }}
+            />
+          </li>
+          <li>
             <span>Total horas:</span>
-            {totalLancado}h
+            {totalLancado}
+          </li>
+          <li>
+            <span>Última hora lançada:</span>
+            {horaFinalFormatted}
           </li>
           <li>
             <span>Total OS:</span>
