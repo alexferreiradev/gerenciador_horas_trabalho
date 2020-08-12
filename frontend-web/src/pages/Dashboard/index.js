@@ -1,9 +1,15 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import * as clipboard from 'clipboard-polyfill/text';
-import { addMinutes } from 'date-fns';
+import {
+  addMinutes,
+  setHours,
+  setMinutes,
+  parseISO,
+  formatISO,
+} from 'date-fns';
 import { KeyboardTimePicker } from '@material-ui/pickers';
-import AsyncSelect from 'react-select/async';
+import AsyncCreatableSelect from 'react-select/async-creatable';
 
 import { formatHoraLancamento, formatHoraMinuto } from '../../util/index';
 
@@ -12,8 +18,9 @@ import { Container, Resumo, ListaLancamento } from './styles';
 function Dashboard() {
   const [lancamentoList, setLancamentoList] = useState([]);
   const [newLancamento, setNewLancamento] = useState({});
+  const [osSelected, setOsSelected] = useState({ value: '', label: '' });
   const [editing, setEditing] = useState(false);
-  const [horaInicio, setHoraInicio] = useState(new Date());
+  const [horaInicio, setHoraInicio] = useState();
   const emptyLancamento = { os: '', acao: '', intervalo: '', sistema: '' };
 
   const totalIntervalo = useMemo(() => {
@@ -36,9 +43,17 @@ function Dashboard() {
   const horaFinalFormatted = useMemo(() => {
     return `${formatHoraMinuto(horaFinal)}`;
   }, [horaFinal]);
-  const horaInicioFormatted = useMemo(() => formatHoraMinuto(horaInicio), [
-    horaInicio,
-  ]);
+  const osList = useMemo(() => {
+    const lista = lancamentoList.map((i) => i.os) || [];
+    const osSet = new Set(lista);
+    return osSet || [];
+  }, [lancamentoList]);
+  const osSelectList = useMemo(() => {
+    if (!osList) return [];
+    return (
+      [...osList].map((i) => ({ value: i, label: i, isFixed: true })) || []
+    );
+  }, [osList]);
 
   useEffect(() => {
     function saveInStorage() {
@@ -49,6 +64,20 @@ function Dashboard() {
 
     saveInStorage();
   }, [lancamentoList]);
+
+  useEffect(() => {
+    function saveHoraInicioInStorage() {
+      if (horaInicio) {
+        localStorage.setItem('hora/data-inicio', formatISO(horaInicio));
+      }
+    }
+
+    saveHoraInicioInStorage();
+  }, [horaInicio]);
+
+  useEffect(() => {
+    setOsSelected({ value: newLancamento.os, label: newLancamento.os });
+  }, [newLancamento]);
 
   useEffect(() => {
     function loadFromStorage() {
@@ -71,7 +100,17 @@ function Dashboard() {
       }
     }
 
+    function loadDataInicioFromStorage() {
+      const horaInicioISO = localStorage.getItem('hora/data-inicio');
+      if (horaInicioISO) {
+        setHoraInicio(parseISO(horaInicioISO));
+      } else {
+        setHoraInicio(setHours(setMinutes(new Date(), 0), 12));
+      }
+    }
+
     loadFromStorage();
+    loadDataInicioFromStorage();
   }, []);
 
   function newLancamentoInvalid() {
@@ -161,6 +200,25 @@ function Dashboard() {
   function handleCancelar() {
     setNewLancamento(emptyLancamento);
     setEditing(false);
+    setOsSelected(undefined);
+  }
+
+  function promiseOSSelect(inputValue) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(
+          osSelectList.filter((i) =>
+            i.label.toLowerCase().includes(inputValue.toLowerCase())
+          )
+        );
+      }, 1000);
+    });
+  }
+
+  function handleChangeOS(newV, _) {
+    if (!newV) return;
+    const { value = '' } = newV;
+    setNewLancamento({ ...newLancamento, os: value });
   }
 
   return (
@@ -179,7 +237,7 @@ function Dashboard() {
             />
           </li>
           <li>
-            <span>Total horas:</span>
+            <span>Total Lançado:</span>
             {totalLancado}
           </li>
           <li>
@@ -205,7 +263,7 @@ function Dashboard() {
             </span>
             <span>{lancamento.intervalo}m - </span>
             <span>OS#{lancamento.os} - </span>
-            <span>OS#{lancamento.sistema} - </span>
+            <span>{lancamento.sistema} - </span>
             <span>{lancamento.acao}</span>
             <button type="button" onClick={() => handleEdit(lancamento)}>
               Edit
@@ -218,7 +276,7 @@ function Dashboard() {
             </button>
           </div>
         ))}
-        <div>
+        <div className="container-new">
           <input
             type="text"
             value={newLancamento.intervalo}
@@ -227,13 +285,14 @@ function Dashboard() {
               setNewLancamento({ ...newLancamento, intervalo: e.target.value })
             }
           />
-          <input
-            type="text"
-            value={newLancamento.os}
-            placeholder="número da OS"
-            onChange={(e) =>
-              setNewLancamento({ ...newLancamento, os: e.target.value })
-            }
+          <AsyncCreatableSelect
+            className="createOS"
+            isClearable
+            createOptionPosition="first"
+            allowCreateWhileLoading
+            value={osSelected}
+            loadOptions={promiseOSSelect}
+            onChange={(newV, action) => handleChangeOS(newV, action)}
           />
           <input
             type="text"

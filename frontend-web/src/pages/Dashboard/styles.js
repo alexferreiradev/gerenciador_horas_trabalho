@@ -29,13 +29,19 @@ export const ListaLancamento = styled.div`
   height: 100%;
   margin: 8px;
 
-  div {
+  .container-new {
+    display: flex;
     border: 1px solid #000;
     padding: 4px;
+    flex-direction: column;
+    justify-content: space-evenly;
 
     textarea {
       min-width: 522px;
       min-height: 100px;
+    }
+    .createOS {
+      width: 200px;
     }
   }
 `;
