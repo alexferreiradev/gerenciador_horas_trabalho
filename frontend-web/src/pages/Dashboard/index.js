@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import * as clipboard from 'clipboard-polyfill/text';
 import {
@@ -11,7 +11,11 @@ import {
 import { KeyboardTimePicker } from '@material-ui/pickers';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 
-import { formatHoraLancamento, formatHoraMinuto } from '../../util/index';
+import {
+  formatHoraLancamento,
+  formatHoraMinuto,
+  convertMinutesToObj,
+} from '../../util/index';
 
 import { Container, Resumo, ListaLancamento } from './styles';
 
@@ -32,9 +36,7 @@ function Dashboard() {
     );
   }, [lancamentoList]);
   const totalLancado = useMemo(() => {
-    const horas = totalIntervalo / 60;
-    const hora = Number.parseInt(horas, 10);
-    const minuto = Math.round((horas - hora).toFixed(2) * 60);
+    const { hora, minuto } = convertMinutesToObj(totalIntervalo);
     return `${hora}h, ${minuto}m`;
   }, [totalIntervalo]);
   const horaFinal = useMemo(() => {
@@ -86,13 +88,16 @@ function Dashboard() {
       if (lancamentoListParsed && lancamentoListParsed.length > 0) {
         setLancamentoList(lancamentoListParsed);
       } else {
+        const intervalo = 15;
+        const { hora, minuto } = convertMinutesToObj(intervalo);
         setLancamentoList([
           {
             id: 1,
             acao: 'inicio trabalho',
             hora: new Date(),
             horaFormatted: formatHoraLancamento(new Date()),
-            intervalo: '15',
+            minutesConverted: `${hora}h, ${minuto}m`,
+            intervalo,
             sistema: 'CRM',
             os: '123',
           },
@@ -131,10 +136,12 @@ function Dashboard() {
 
     if (lacamentoIndex >= 0) {
       const newList = [...lancamentoList];
+      const { hora, minuto } = convertMinutesToObj(newLancamento.intervalo);
       const newLancamentoModel = {
         ...newLancamento,
         hora: new Date(),
         horaFormatted: formatHoraLancamento(new Date()),
+        minutesConverted: `${hora}h, ${minuto}m`,
       };
       newList[lacamentoIndex] = newLancamentoModel;
       setLancamentoList(newList);
@@ -161,11 +168,13 @@ function Dashboard() {
         }
       });
       const lastId = idAux >= 0 ? idAux : 1;
+      const { hora, minuto } = convertMinutesToObj(newLancamento.intervalo);
       const newLancamentoModel = {
         ...newLancamento,
         id: lastId + 1,
         hora: new Date(),
         horaFormatted: formatHoraLancamento(new Date()),
+        minutesConverted: `${hora}h, ${minuto}m`,
       };
       setLancamentoList([...lancamentoList, newLancamentoModel]);
       setNewLancamento(emptyLancamento);
@@ -258,10 +267,10 @@ function Dashboard() {
         {lancamentoList.length === 0 && <span>Não há lancamentos</span>}
         {lancamentoList.map((lancamento) => (
           <div key={lancamento.id}>
+            <span>lancado em:{lancamento.horaFormatted} -</span>
             <span>
-              {lancamento.horaFormatted} {'=>'}{' '}
+              {lancamento.intervalo}m ={'> '} {lancamento.minutesConverted} -
             </span>
-            <span>{lancamento.intervalo}m - </span>
             <span>OS#{lancamento.os} - </span>
             <span>{lancamento.sistema} - </span>
             <span>{lancamento.acao}</span>
