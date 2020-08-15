@@ -25,7 +25,13 @@ function Dashboard() {
   const [osSelected, setOsSelected] = useState({ value: '', label: '' });
   const [editing, setEditing] = useState(false);
   const [horaInicio, setHoraInicio] = useState();
-  const emptyLancamento = { os: '', acao: '', intervalo: '', sistema: '' };
+  const emptyLancamento = {
+    os: '',
+    acao: '',
+    intervalo: '',
+    sistema: '',
+    copied: false,
+  };
 
   const totalIntervalo = useMemo(() => {
     return (
@@ -177,9 +183,9 @@ function Dashboard() {
         minutesConverted: `${hora}h, ${minuto}m`,
       };
       setLancamentoList([...lancamentoList, newLancamentoModel]);
-      setNewLancamento(emptyLancamento);
       toast.success('Lancamento feito com sucesso');
     }
+    setNewLancamento(emptyLancamento);
   }
 
   function handleEdit(lancamentoEditing) {
@@ -188,8 +194,19 @@ function Dashboard() {
   }
 
   function handleCopy(lancamento) {
-    clipboard.writeText(lancamento.acao);
-    toast.success('Acao copiada para área de transferência');
+    const { acao, id } = lancamento;
+    const lancamentoSelectedIndex = lancamentoList.findIndex(
+      (i) => i.id === id
+    );
+    if (lancamentoSelectedIndex >= 0) {
+      lancamento.copied = true;
+      lancamentoList[lancamentoSelectedIndex] = lancamento;
+      setLancamentoList([...lancamentoList]);
+      clipboard.writeText(acao);
+      toast.success('Acao copiada para área de transferência');
+    } else {
+      toast.error('Lancamento não encontrado');
+    }
   }
 
   function handleDelete(lancamento) {
@@ -230,6 +247,14 @@ function Dashboard() {
     setNewLancamento({ ...newLancamento, os: value });
   }
 
+  function handleUnblockEdit() {
+    const newLancamentoList = lancamentoList.map((i) => ({
+      ...i,
+      copied: false,
+    }));
+    setLancamentoList(newLancamentoList);
+  }
+
   return (
     <Container>
       <Resumo>
@@ -258,11 +283,14 @@ function Dashboard() {
             {2}
           </li>
         </ul>
-      </Resumo>
-      <ListaLancamento>
         <button type="button" onClick={() => handleLimpar()}>
           Limpar
         </button>
+        <button type="button" onClick={() => handleUnblockEdit()}>
+          Desbloquear ediçao para todos
+        </button>
+      </Resumo>
+      <ListaLancamento>
         <h1>Lista de lancamentos</h1>
         {lancamentoList.length === 0 && <span>Não há lancamentos</span>}
         {lancamentoList.map((lancamento) => (
@@ -274,7 +302,11 @@ function Dashboard() {
             <span>OS#{lancamento.os} - </span>
             <span>{lancamento.sistema} - </span>
             <span>{lancamento.acao}</span>
-            <button type="button" onClick={() => handleEdit(lancamento)}>
+            <button
+              type="button"
+              onClick={() => handleEdit(lancamento)}
+              disabled={lancamento.copied}
+            >
               Edit
             </button>
             <button type="button" onClick={() => handleCopy(lancamento)}>
