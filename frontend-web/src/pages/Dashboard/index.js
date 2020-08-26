@@ -23,6 +23,10 @@ function Dashboard() {
   const [lancamentoList, setLancamentoList] = useState([]);
   const [newLancamento, setNewLancamento] = useState({});
   const [osSelected, setOsSelected] = useState({ value: '', label: '' });
+  const [sistemaSelected, setSistemaSelected] = useState({
+    value: '',
+    label: '',
+  });
   const [editing, setEditing] = useState(false);
   const [horaInicio, setHoraInicio] = useState();
   const emptyLancamento = {
@@ -56,12 +60,23 @@ function Dashboard() {
     const osSet = new Set(lista);
     return osSet || [];
   }, [lancamentoList]);
+  const sistemaList = useMemo(() => {
+    const lista = lancamentoList.map((i) => i.sistema) || [];
+    const osSet = new Set(lista);
+    return osSet || [];
+  }, [lancamentoList]);
   const osSelectList = useMemo(() => {
     if (!osList) return [];
     return (
       [...osList].map((i) => ({ value: i, label: i, isFixed: true })) || []
     );
   }, [osList]);
+  const sistemaSelectList = useMemo(() => {
+    if (!sistemaList) return [];
+    return (
+      [...sistemaList].map((i) => ({ value: i, label: i, isFixed: true })) || []
+    );
+  }, [sistemaList]);
 
   useEffect(() => {
     function saveInStorage() {
@@ -85,6 +100,10 @@ function Dashboard() {
 
   useEffect(() => {
     setOsSelected({ value: newLancamento.os, label: newLancamento.os });
+    setSistemaSelected({
+      value: newLancamento.sistema,
+      label: newLancamento.sistema,
+    });
   }, [newLancamento]);
 
   useEffect(() => {
@@ -241,10 +260,26 @@ function Dashboard() {
     });
   }
 
+  function promiseSistemaSelect(inputValue) {
+    return new Promise((resolve) => {
+      resolve(
+        sistemaSelectList.filter((i) =>
+          i.label.toLowerCase().includes(inputValue.toLowerCase())
+        )
+      );
+    });
+  }
+
   function handleChangeOS(newV, _) {
     if (!newV) return;
     const { value = '' } = newV;
     setNewLancamento({ ...newLancamento, os: value });
+  }
+
+  function handleChangeSistema(newV, _) {
+    if (!newV) return;
+    const { value = '' } = newV;
+    setNewLancamento({ ...newLancamento, sistema: value });
   }
 
   function handleUnblockEdit() {
@@ -335,13 +370,14 @@ function Dashboard() {
             loadOptions={promiseOSSelect}
             onChange={(newV, action) => handleChangeOS(newV, action)}
           />
-          <input
-            type="text"
-            value={newLancamento.sistema}
-            placeholder="Sistema"
-            onChange={(e) =>
-              setNewLancamento({ ...newLancamento, sistema: e.target.value })
-            }
+          <AsyncCreatableSelect
+            className="createOS"
+            isClearable
+            createOptionPosition="first"
+            allowCreateWhileLoading
+            value={sistemaSelected}
+            loadOptions={promiseSistemaSelect}
+            onChange={(newV, action) => handleChangeSistema(newV, action)}
           />
           <textarea
             type="text"
