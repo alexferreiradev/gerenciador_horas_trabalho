@@ -62,8 +62,8 @@ function Dashboard() {
   }, [lancamentoList]);
   const sistemaList = useMemo(() => {
     const lista = lancamentoList.map((i) => i.sistema) || [];
-    const osSet = new Set(lista);
-    return osSet || [];
+    const sistemaSet = new Set(lista);
+    return sistemaSet || [];
   }, [lancamentoList]);
   const osSelectList = useMemo(() => {
     if (!osList) return [];
@@ -77,6 +77,13 @@ function Dashboard() {
       [...sistemaList].map((i) => ({ value: i, label: i, isFixed: true })) || []
     );
   }, [sistemaList]);
+  const totalOS = useMemo(() => {
+    if (osList) {
+      return osList.size;
+    }
+
+    return 0;
+  }, [osList]);
 
   useEffect(() => {
     function saveInStorage() {
@@ -314,8 +321,8 @@ function Dashboard() {
             {horaFinalFormatted}
           </li>
           <li>
-            <span>Total OS:</span>
-            {2}
+            <span>Total OS trabalhada:</span>
+            {totalOS}
           </li>
         </ul>
         <button type="button" onClick={() => handleLimpar()}>
