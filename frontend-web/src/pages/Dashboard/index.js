@@ -247,7 +247,9 @@ function Dashboard() {
     }
   }
 
-  function handleLimpar() {}
+  function handleLimpar() {
+    setLancamentoList([]);
+  }
 
   function handleCancelar() {
     setNewLancamento(emptyLancamento);
@@ -325,9 +327,9 @@ function Dashboard() {
             {totalOS}
           </li>
         </ul>
-        <button type="button" onClick={() => handleLimpar()}>
+        {/* <button type="button" onKeyPress={() => handleLimpar()}>
           Limpar
-        </button>
+        </button> */}
         <button type="button" onClick={() => handleUnblockEdit()}>
           Desbloquear ediçao para todos
         </button>
