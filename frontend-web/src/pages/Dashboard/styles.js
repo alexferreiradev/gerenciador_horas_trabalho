@@ -44,4 +44,13 @@ export const ListaLancamento = styled.div`
       width: 200px;
     }
   }
+
+  & > div {
+    margin-bottom: 8px;
+
+    button {
+      margin-left: 8px;
+      padding: 2px;
+    }
+  }
 `;
