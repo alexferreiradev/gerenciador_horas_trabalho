@@ -259,13 +259,11 @@ function Dashboard() {
 
   function promiseOSSelect(inputValue) {
     return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(
-          osSelectList.filter((i) =>
-            i.label.toLowerCase().includes(inputValue.toLowerCase())
-          )
-        );
-      }, 1000);
+      resolve(
+        osSelectList.filter((i) =>
+          i.label.toLowerCase().includes(inputValue.toLowerCase())
+        )
+      );
     });
   }
 
