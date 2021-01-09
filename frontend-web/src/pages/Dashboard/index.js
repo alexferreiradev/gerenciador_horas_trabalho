@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import * as clipboard from 'clipboard-polyfill/text';
 import {
@@ -9,6 +9,7 @@ import {
   formatISO,
 } from 'date-fns';
 import { KeyboardTimePicker } from '@material-ui/pickers';
+import { Checkbox } from 'semantic-ui-react';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 
 import {
@@ -17,11 +18,19 @@ import {
   convertMinutesToObj,
 } from '../../util/index';
 
-import { Container, Resumo, ListaLancamento } from './styles';
+import { Container, Resumo, ListaLancamento, LancamentoItem } from './styles';
 
 function Dashboard() {
   const [lancamentoList, setLancamentoList] = useState([]);
-  const [newLancamento, setNewLancamento] = useState({});
+  const emptyLancamento = {
+    os: undefined,
+    acao: undefined,
+    intervalo: null,
+    sistema: undefined,
+    copied: false,
+    tarefaEvolutiva: false,
+  };
+  const [newLancamento, setNewLancamento] = useState(emptyLancamento);
   const [osSelected, setOsSelected] = useState({ value: '', label: '' });
   const [sistemaSelected, setSistemaSelected] = useState({
     value: '',
@@ -29,13 +38,6 @@ function Dashboard() {
   });
   const [editing, setEditing] = useState(false);
   const [horaInicio, setHoraInicio] = useState();
-  const emptyLancamento = {
-    os: '',
-    acao: '',
-    intervalo: '',
-    sistema: '',
-    copied: false,
-  };
 
   const totalIntervalo = useMemo(() => {
     return (
@@ -360,7 +362,11 @@ function Dashboard() {
         <h1>Lista de lancamentos</h1>
         {lancamentoList.length === 0 && <span>Não há lancamentos</span>}
         {lancamentoList.map((lancamento) => (
-          <div key={lancamento.id}>
+          <LancamentoItem
+            key={lancamento.id}
+            tarefaEvolutiva={lancamento.tarefaEvolutiva}
+            copied={lancamento.copied}
+          >
             <span>lancado em:{lancamento.horaFormatted} -</span>
             <span>
               {lancamento.intervalo}m ={'> '} {lancamento.minutesConverted} -
@@ -376,22 +382,38 @@ function Dashboard() {
               Edit
             </button>
             <button type="button" onClick={() => handleCopy(lancamento)}>
-              Copy
+              {lancamento.tarefaEvolutiva ? 'Copy to Redmine' : 'Copy to OS'}
             </button>
             <button type="button" onClick={() => handleDelete(lancamento)}>
               Remover
             </button>
-          </div>
+          </LancamentoItem>
         ))}
         <div className="container-new">
-          <input
-            type="text"
-            value={newLancamento.intervalo}
-            placeholder="Minutos gastos na tarefa"
-            onChange={(e) =>
-              setNewLancamento({ ...newLancamento, intervalo: e.target.value })
-            }
-          />
+          <div className="container-first-line">
+            <input
+              type="Number"
+              value={newLancamento.intervalo}
+              placeholder="Minutos gastos na tarefa"
+              onChange={(e) =>
+                setNewLancamento({
+                  ...newLancamento,
+                  intervalo: e.target.value,
+                })
+              }
+            />
+            <Checkbox
+              label="Tarefa evolutiva"
+              checked={newLancamento.tarefaEvolutiva}
+              value={newLancamento.tarefaEvolutiva}
+              onChange={(_) =>
+                setNewLancamento({
+                  ...newLancamento,
+                  tarefaEvolutiva: !newLancamento.tarefaEvolutiva,
+                })
+              }
+            />
+          </div>
           <AsyncCreatableSelect
             className="createOS"
             isClearable
