@@ -20,6 +20,10 @@ export const Resumo = styled.div`
   width: 35%;
   height: 100%;
   margin: 8px;
+
+  ul {
+    list-style: none;
+  }
 `;
 
 export const ListaLancamento = styled.div`
@@ -43,6 +47,22 @@ export const ListaLancamento = styled.div`
     .createOS {
       width: 200px;
     }
+    .container-first-line {
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+      align-content: space-around;
+
+      input {
+        border: none;
+        border-radius: 4px;
+        padding: 4px;
+      }
+
+      & > div {
+        margin: 10px;
+      }
+    }
   }
 
   & > div {
@@ -53,4 +73,17 @@ export const ListaLancamento = styled.div`
       padding: 2px;
     }
   }
+`;
+
+const makeBackground = (props) => {
+  const { tarefaEvolutiva, copied } = props;
+  if (copied) return '#eee';
+  if (tarefaEvolutiva) return '#bbb';
+  return 'transparent';
+};
+
+export const LancamentoItem = styled.div`
+  background: ${(props) => makeBackground(props)};
+  border: 1px solid #999;
+  padding: 2px;
 `;

@@ -6,7 +6,8 @@ import DashBoard from './pages/Dashboard';
 export default function Routes() {
   return (
     <Switch>
-      <Route path="/" component={DashBoard} />
+      <Route path="/" exact component={DashBoard} />
+      <Route path="/home" component={DashBoard} />
     </Switch>
   );
 }

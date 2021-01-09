@@ -1,7 +1,9 @@
 {
-  "name": "frontend-web",
-  "version": "0.0.1",
+  "name": "lancador-horas",
+  "app-name": "Lançador de horas",
+  "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@date-io/date-fns": "~1.3.13",
     "@material-ui/core": "^4.11.0",
