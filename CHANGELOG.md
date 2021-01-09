@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - 2020-08-15
 ### Added
+### Changed
+### Removed
+### Fixed
+
+## [0.1.0] - 2021-01-09
+### Added
 - Versão e nome de aplicação no cabeçalho
 - Função para tipificar um lançamento como evolutiva ou corretiva
 - Arquivo de Changelog no projeto frontend para facilitar a documentação para novos devs
@@ -34,5 +40,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Botão para reverter bloqueio de edição
 
 
-[Unreleased]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/compare/v0.0.1...HEAD
+[Unreleased]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/compare/v0.1.0...v0.0.1
 [0.0.1]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/releases/tag/v0.0.1
