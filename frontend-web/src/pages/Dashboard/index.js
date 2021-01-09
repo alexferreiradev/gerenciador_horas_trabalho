@@ -150,15 +150,45 @@ function Dashboard() {
     loadDataInicioFromStorage();
   }, []);
 
-  function newLancamentoInvalid() {
-    const { intervalo } = newLancamento;
-    if (intervalo == null || Number.isNaN(Number.parseInt(intervalo, 10)))
-      return true;
-    if (newLancamento.os == null) return true;
-    if (newLancamento.sistema == null) return true;
-    if (newLancamento.acao == null) return true;
+  function handleCancelar() {
+    setNewLancamento(emptyLancamento);
+    setEditing(false);
+    setOsSelected(undefined);
+  }
 
-    return false;
+  function valideOrToast() {
+    const MsgComponent = ({ msg }) => (
+      <div>
+        <h3>Preenchimento incorreto</h3>
+        <span>{msg}</span>
+      </div>
+    );
+
+    const { intervalo } = newLancamento;
+    let isInvalid = false;
+    const msgErrorList = [];
+    if (intervalo == null || Number.isNaN(Number.parseInt(intervalo, 10))) {
+      isInvalid = isInvalid || true;
+      msgErrorList.push(
+        'Intervalo inválido. Deve ser um número que indique os minutos trabalhados na OS'
+      );
+    }
+    if (newLancamento.os == null) {
+      isInvalid = isInvalid || true;
+      msgErrorList.push('Número de OS inválido');
+    }
+    if (newLancamento.sistema == null) {
+      isInvalid = isInvalid || true;
+      msgErrorList.push('Sistema informado inválido');
+    }
+    if (newLancamento.acao == null) {
+      isInvalid = isInvalid || true;
+      msgErrorList.push('Texto de ação é obrigatório');
+    }
+
+    msgErrorList.map((error) => toast.error(<MsgComponent msg={error} />));
+
+    return isInvalid;
   }
 
   function editLancamento() {
@@ -184,8 +214,7 @@ function Dashboard() {
   }
 
   function handleLancar() {
-    if (newLancamentoInvalid()) {
-      toast.warn('Preenchimento incorreto');
+    if (valideOrToast()) {
       return;
     }
 
@@ -211,7 +240,8 @@ function Dashboard() {
       setLancamentoList([...lancamentoList, newLancamentoModel]);
       toast.success('Lancamento feito com sucesso');
     }
-    setNewLancamento(emptyLancamento);
+
+    handleCancelar();
   }
 
   function handleEdit(lancamentoEditing) {
@@ -249,12 +279,6 @@ function Dashboard() {
 
   function handleLimpar() {
     setLancamentoList([]);
-  }
-
-  function handleCancelar() {
-    setNewLancamento(emptyLancamento);
-    setEditing(false);
-    setOsSelected(undefined);
   }
 
   function promiseOSSelect(inputValue) {
