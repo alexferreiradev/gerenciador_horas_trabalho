@@ -10,6 +10,7 @@
 
 # production
 /build
+/lancador_horas*
 
 # misc
 .DS_Store
