@@ -1,12 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { Container } from './styles';
 
 function Header() {
   return (
     <Container>
-      <Link to="/">Horas Trabalhadas</Link>
+      <span>
+        {process.env.REACT_APP_NAME} - {process.env.REACT_APP_VERSION}
+      </span>
     </Container>
   );
 }
