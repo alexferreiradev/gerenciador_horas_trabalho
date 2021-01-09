@@ -20,6 +20,10 @@ export const Resumo = styled.div`
   width: 35%;
   height: 100%;
   margin: 8px;
+
+  ul {
+    list-style: none;
+  }
 `;
 
 export const ListaLancamento = styled.div`
