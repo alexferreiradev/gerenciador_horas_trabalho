@@ -24,8 +24,8 @@ function Dashboard() {
   const [lancamentoList, setLancamentoList] = useState([]);
   const emptyLancamento = {
     os: undefined,
-    acao: undefined,
-    intervalo: undefined,
+    acao: '',
+    intervalo: '',
     sistema: undefined,
     copied: false,
     tarefaEvolutiva: false,
@@ -86,6 +86,34 @@ function Dashboard() {
 
     return 0;
   }, [osList]);
+
+  const totalTempoCorretiva = useMemo(() => {
+    if (lancamentoList) {
+      return convertIntervaloParaTempo({
+        intervalo: lancamentoList.reduce(
+          (prev, c) => (c.tarefaEvolutiva ? 0 : prev + c.intervalo),
+          0
+        ),
+        tarefaEvolutiva: false,
+      });
+    }
+
+    return 0;
+  }, [lancamentoList]);
+
+  const totalTempoEvolutiva = useMemo(() => {
+    if (lancamentoList) {
+      return convertIntervaloParaTempo({
+        intervalo: lancamentoList.reduce(
+          (prev, c) => (c.tarefaEvolutiva ? prev + c.intervalo : 0),
+          0
+        ),
+        tarefaEvolutiva: true,
+      });
+    }
+
+    return 0;
+  }, [lancamentoList]);
 
   function convertIntervaloParaTempo({ intervalo, tarefaEvolutiva }) {
     const { hora, minuto } = convertMinutesToObj(intervalo);
@@ -364,6 +392,14 @@ function Dashboard() {
           <li>
             <span>Total OS trabalhada:</span>
             {totalOS}
+          </li>
+          <li>
+            <span>Total corretivas trabalhada:</span>
+            {totalTempoCorretiva}
+          </li>
+          <li>
+            <span>Total evolutivas trabalhada:</span>
+            {totalTempoEvolutiva}
           </li>
         </ul>
         {/* <button type="button" onKeyPress={() => handleLimpar()}>
