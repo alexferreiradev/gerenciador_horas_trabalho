@@ -91,7 +91,8 @@ function Dashboard() {
     if (lancamentoList) {
       return convertIntervaloParaTempo({
         intervalo: lancamentoList.reduce(
-          (prev, c) => (c.tarefaEvolutiva ? 0 : prev + c.intervalo),
+          (prev, c) =>
+            c.tarefaEvolutiva ? prev : prev + Number.parseInt(c.intervalo, 10),
           0
         ),
         tarefaEvolutiva: false,
@@ -105,7 +106,8 @@ function Dashboard() {
     if (lancamentoList) {
       return convertIntervaloParaTempo({
         intervalo: lancamentoList.reduce(
-          (prev, c) => (c.tarefaEvolutiva ? prev + c.intervalo : 0),
+          (prev, c) =>
+            c.tarefaEvolutiva ? prev + Number.parseInt(c.intervalo, 10) : prev,
           0
         ),
         tarefaEvolutiva: true,
@@ -117,7 +119,7 @@ function Dashboard() {
 
   function convertIntervaloParaTempo({ intervalo, tarefaEvolutiva }) {
     const { hora, minuto } = convertMinutesToObj(intervalo);
-    const minutoScaled = (minuto / 60).toFixed(2) * 100;
+    const minutoScaled = `${(minuto / 60).toFixed(2)}`.split('.')[1];
     if (tarefaEvolutiva) return `${hora}.${minutoScaled}h`;
     return `${hora}h, ${minuto}m`;
   }
