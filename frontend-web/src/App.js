@@ -7,14 +7,14 @@ import DateFnsUtils from '@date-io/date-fns';
 import history from './services/history';
 import Global from './styles/global';
 import Header from './components/Header';
-import Routes from './routes';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
     <Router history={history}>
       <Header />
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Routes />
+        <Dashboard />
       </MuiPickersUtilsProvider>
       <Global />
       <ToastContainer autoClose={3000} />
