@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 ### Removed
 ### Fixed
+
+## [0.2.0] - 2021-02-09
+### Added
+- Adição de minutos em formato redmine
+### Changed
+### Removed
+### Fixed
 - Documentação de geração de versão
 - Changelog compare entre versões
 - Title de html com o nome da aplicação
