@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import * as clipboard from 'clipboard-polyfill/text';
 import {
@@ -24,8 +24,8 @@ function Dashboard() {
   const [lancamentoList, setLancamentoList] = useState([]);
   const emptyLancamento = {
     os: undefined,
-    acao: undefined,
-    intervalo: null,
+    acao: '',
+    intervalo: '',
     sistema: undefined,
     copied: false,
     tarefaEvolutiva: false,
@@ -86,6 +86,47 @@ function Dashboard() {
 
     return 0;
   }, [osList]);
+
+  const totalTempoCorretiva = useMemo(() => {
+    if (lancamentoList) {
+      return convertIntervaloParaTempo({
+        intervalo: lancamentoList.reduce(
+          (prev, c) =>
+            c.tarefaEvolutiva ? prev : prev + Number.parseInt(c.intervalo, 10),
+          0
+        ),
+        tarefaEvolutiva: false,
+      });
+    }
+
+    return 0;
+  }, [lancamentoList]);
+
+  const totalTempoEvolutiva = useMemo(() => {
+    if (lancamentoList) {
+      return convertIntervaloParaTempo({
+        intervalo: lancamentoList.reduce(
+          (prev, c) =>
+            c.tarefaEvolutiva ? prev + Number.parseInt(c.intervalo, 10) : prev,
+          0
+        ),
+        tarefaEvolutiva: true,
+      });
+    }
+
+    return 0;
+  }, [lancamentoList]);
+
+  function convertIntervaloParaTempo({ intervalo, tarefaEvolutiva }) {
+    const { hora, minuto } = convertMinutesToObj(intervalo);
+    const minutoScaled = `${(minuto / 60).toFixed(2)}`.split('.')[1];
+    if (tarefaEvolutiva) return `${hora}.${minutoScaled}h`;
+    return `${hora}h, ${minuto}m`;
+  }
+
+  const formataTempoOS = useCallback(() => {
+    return convertIntervaloParaTempo(newLancamento);
+  }, [newLancamento]);
 
   useEffect(() => {
     function saveInStorage() {
@@ -200,12 +241,14 @@ function Dashboard() {
 
     if (lacamentoIndex >= 0) {
       const newList = [...lancamentoList];
-      const { hora, minuto } = convertMinutesToObj(newLancamento.intervalo);
       const newLancamentoModel = {
         ...newLancamento,
         hora: new Date(),
         horaFormatted: formatHoraLancamento(new Date()),
-        minutesConverted: `${hora}h, ${minuto}m`,
+        minutesConverted: formataTempoOS(
+          newLancamento.intervalo,
+          newLancamento.tarefaEvolutiva
+        ),
       };
       newList[lacamentoIndex] = newLancamentoModel;
       setLancamentoList(newList);
@@ -231,13 +274,15 @@ function Dashboard() {
         }
       });
       const lastId = idAux >= 0 ? idAux : 1;
-      const { hora, minuto } = convertMinutesToObj(newLancamento.intervalo);
       const newLancamentoModel = {
         ...newLancamento,
         id: lastId + 1,
         hora: new Date(),
         horaFormatted: formatHoraLancamento(new Date()),
-        minutesConverted: `${hora}h, ${minuto}m`,
+        minutesConverted: formataTempoOS(
+          newLancamento.intervalo,
+          newLancamento.tarefaEvolutiva
+        ),
       };
       setLancamentoList([...lancamentoList, newLancamentoModel]);
       toast.success('Lancamento feito com sucesso');
@@ -350,6 +395,14 @@ function Dashboard() {
             <span>Total OS trabalhada:</span>
             {totalOS}
           </li>
+          <li>
+            <span>Total corretivas trabalhada:</span>
+            {totalTempoCorretiva}
+          </li>
+          <li>
+            <span>Total evolutivas trabalhada:</span>
+            {totalTempoEvolutiva}
+          </li>
         </ul>
         {/* <button type="button" onKeyPress={() => handleLimpar()}>
           Limpar
@@ -405,7 +458,6 @@ function Dashboard() {
             <Checkbox
               label="Tarefa evolutiva"
               checked={newLancamento.tarefaEvolutiva}
-              value={newLancamento.tarefaEvolutiva}
               onChange={(_) =>
                 setNewLancamento({
                   ...newLancamento,
