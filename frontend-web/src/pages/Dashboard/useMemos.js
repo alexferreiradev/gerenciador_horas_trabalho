@@ -1,14 +1,21 @@
 import { useMemo } from 'react';
 import { addMinutes } from 'date-fns';
 
-import { convertIntervaloParaTempo } from './utils';
+import {
+  convertIntervaloParaTempo,
+  filterLancamentosWithIntervalo,
+} from './utils';
 import { convertMinutesToObj, formatHoraMinuto } from '../../util/index';
 
 export default function useMemos({ lancamentoList, horaInicio }) {
+  const lancamentosFiltered = useMemo(() => {
+    return filterLancamentosWithIntervalo(lancamentoList);
+  }, [lancamentoList]);
+
   const totalTempoCorretiva = useMemo(() => {
     if (lancamentoList) {
       return convertIntervaloParaTempo({
-        intervalo: lancamentoList.reduce(
+        intervalo: lancamentosFiltered.reduce(
           (prev, c) =>
             c.tarefaEvolutiva ? prev : prev + Number.parseInt(c.intervalo, 10),
           0
@@ -18,12 +25,12 @@ export default function useMemos({ lancamentoList, horaInicio }) {
     }
 
     return 0;
-  }, [lancamentoList]);
+  }, [lancamentoList, lancamentosFiltered]);
 
   const totalTempoEvolutiva = useMemo(() => {
     if (lancamentoList) {
       return convertIntervaloParaTempo({
-        intervalo: lancamentoList.reduce(
+        intervalo: lancamentosFiltered.reduce(
           (prev, c) =>
             c.tarefaEvolutiva ? prev + Number.parseInt(c.intervalo, 10) : prev,
           0
@@ -33,9 +40,9 @@ export default function useMemos({ lancamentoList, horaInicio }) {
     }
 
     return 0;
-  }, [lancamentoList]);
+  }, [lancamentoList, lancamentosFiltered]);
 
-  const totalIntervalo = useMemo(() => {
+  const totalMinutosLancados = useMemo(() => {
     return (
       lancamentoList.reduce(
         (acc, current) => acc + Number.parseInt(current.intervalo, 10),
@@ -43,38 +50,57 @@ export default function useMemos({ lancamentoList, horaInicio }) {
       ) || 0
     );
   }, [lancamentoList]);
+
+  const totalMinutosLancamentosSemIntervalo = useMemo(() => {
+    return (
+      lancamentosFiltered.reduce(
+        (acc, current) => acc + Number.parseInt(current.intervalo, 10),
+        0
+      ) || 0
+    );
+  }, [lancamentosFiltered]);
+
   const totalLancado = useMemo(() => {
-    const { hora, minuto } = convertMinutesToObj(totalIntervalo);
+    const { hora, minuto } = convertMinutesToObj(
+      totalMinutosLancamentosSemIntervalo
+    );
     return `${hora}h, ${minuto}m`;
-  }, [totalIntervalo]);
+  }, [totalMinutosLancamentosSemIntervalo]);
+
   const horaFinal = useMemo(() => {
-    return addMinutes(horaInicio, totalIntervalo);
-  }, [totalIntervalo, horaInicio]);
+    return addMinutes(horaInicio, totalMinutosLancados);
+  }, [totalMinutosLancados, horaInicio]);
+
   const horaFinalFormatted = useMemo(() => {
     return `${formatHoraMinuto(horaFinal)}`;
   }, [horaFinal]);
+
   const osList = useMemo(() => {
-    const lista = lancamentoList.map((i) => i.os) || [];
+    const lista = lancamentosFiltered.map((i) => i.os) || [];
     const osSet = new Set(lista);
     return osSet || [];
-  }, [lancamentoList]);
+  }, [lancamentosFiltered]);
+
   const sistemaList = useMemo(() => {
     const lista = lancamentoList.map((i) => i.sistema) || [];
     const sistemaSet = new Set(lista);
     return sistemaSet || [];
   }, [lancamentoList]);
+
   const osSelectList = useMemo(() => {
     if (!osList) return [];
     return (
       [...osList].map((i) => ({ value: i, label: i, isFixed: true })) || []
     );
   }, [osList]);
+
   const sistemaSelectList = useMemo(() => {
     if (!sistemaList) return [];
     return (
       [...sistemaList].map((i) => ({ value: i, label: i, isFixed: true })) || []
     );
   }, [sistemaList]);
+
   const totalOS = useMemo(() => {
     if (osList) {
       return osList.size;
