@@ -164,33 +164,45 @@ function Dashboard() {
                 })
               }
             />
+            <Checkbox
+              label="Intervalo ?"
+              checked={newLancamento.isIntervalo}
+              onChange={(_) =>
+                setNewLancamento({
+                  ...newLancamento,
+                  isIntervalo: !newLancamento.isIntervalo,
+                })
+              }
+            />
           </div>
-          <AsyncCreatableSelect
-            className="createOS"
-            isClearable
-            createOptionPosition="first"
-            allowCreateWhileLoading
-            value={osSelected}
-            loadOptions={promiseOSSelect}
-            onChange={(newV, action) => handleChangeOS(newV, action)}
-          />
-          <AsyncCreatableSelect
-            className="createOS"
-            isClearable
-            createOptionPosition="first"
-            allowCreateWhileLoading
-            value={sistemaSelected}
-            loadOptions={promiseSistemaSelect}
-            onChange={(newV, action) => handleChangeSistema(newV, action)}
-          />
-          <textarea
-            type="text"
-            value={newLancamento.acao}
-            placeholder="Ação realizada"
-            onChange={(e) =>
-              setNewLancamento({ ...newLancamento, acao: e.target.value })
-            }
-          />
+          <div hidden={newLancamento.isIntervalo}>
+            <AsyncCreatableSelect
+              className="createOS"
+              isClearable
+              createOptionPosition="first"
+              allowCreateWhileLoading
+              value={osSelected}
+              loadOptions={promiseOSSelect}
+              onChange={(newV, action) => handleChangeOS(newV, action)}
+            />
+            <AsyncCreatableSelect
+              className="createOS"
+              isClearable
+              createOptionPosition="first"
+              allowCreateWhileLoading
+              value={sistemaSelected}
+              loadOptions={promiseSistemaSelect}
+              onChange={(newV, action) => handleChangeSistema(newV, action)}
+            />
+            <textarea
+              type="text"
+              value={newLancamento.acao}
+              placeholder="Ação realizada"
+              onChange={(e) =>
+                setNewLancamento({ ...newLancamento, acao: e.target.value })
+              }
+            />
+          </div>
           <button type="button" onClick={(e) => handleLancar(e)}>
             Lançar
           </button>
