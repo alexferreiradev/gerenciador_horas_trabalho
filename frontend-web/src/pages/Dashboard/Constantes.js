@@ -5,6 +5,7 @@ const emptyLancamento = {
   sistema: undefined,
   copied: false,
   tarefaEvolutiva: false,
+  isIntervalo: false,
 };
 
 export default {
