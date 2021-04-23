@@ -31,7 +31,7 @@ export default function useFuncoes({
       </div>
     );
 
-    const { intervalo } = newLancamento;
+    const { intervalo, isIntervalo } = newLancamento;
     let isInvalid = false;
     const msgErrorList = [];
     if (intervalo == null || Number.isNaN(Number.parseInt(intervalo, 10))) {
@@ -40,20 +40,22 @@ export default function useFuncoes({
         'Intervalo inválido. Deve ser um número que indique os minutos trabalhados na OS'
       );
     }
-    if (newLancamento.os == null) {
-      isInvalid = isInvalid || true;
-      msgErrorList.push('Número de OS inválido');
-    }
-    if (newLancamento.sistema == null) {
-      isInvalid = isInvalid || true;
-      msgErrorList.push('Sistema informado inválido');
-    }
-    if (newLancamento.acao == null) {
-      isInvalid = isInvalid || true;
-      msgErrorList.push('Texto de ação é obrigatório');
-    }
+    if (!isIntervalo) {
+      if (newLancamento.os == null) {
+        isInvalid = isInvalid || true;
+        msgErrorList.push('Número de OS inválido');
+      }
+      if (newLancamento.sistema == null) {
+        isInvalid = isInvalid || true;
+        msgErrorList.push('Sistema informado inválido');
+      }
+      if (newLancamento.acao == null) {
+        isInvalid = isInvalid || true;
+        msgErrorList.push('Texto de ação é obrigatório');
+      }
 
-    msgErrorList.map((error) => toast.error(<MsgComponent msg={error} />));
+      msgErrorList.map((error) => toast.error(<MsgComponent msg={error} />));
+    }
 
     return isInvalid;
   }
@@ -119,12 +121,16 @@ export default function useFuncoes({
     const lancamentoSelectedIndex = lancamentoList.findIndex(
       (i) => i.id === id
     );
+
     if (lancamentoSelectedIndex >= 0) {
       lancamento.copied = true;
       lancamentoList[lancamentoSelectedIndex] = lancamento;
       setLancamentoList([...lancamentoList]);
       clipboard.writeText(acao);
-      toast.success('Acao copiada para área de transferência');
+      const msg = lancamento.isIntervalo
+        ? 'Intervalo bloqueado'
+        : 'Acao copiada para área de transferência';
+      toast.success(msg);
     } else {
       toast.error('Lancamento não encontrado');
     }
