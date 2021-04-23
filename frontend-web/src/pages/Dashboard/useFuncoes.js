@@ -2,8 +2,7 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import * as clipboard from 'clipboard-polyfill/text';
 
-import { convertIntervaloParaTempo } from './utils';
-import { formatHoraLancamento } from '../../util/index';
+import { convertIntervaloParaTempo, createObjetoLancamentoFrom } from './utils';
 import Constantes from './Constantes';
 
 export default function useFuncoes({
@@ -67,12 +66,10 @@ export default function useFuncoes({
 
     if (lacamentoIndex >= 0) {
       const newList = [...lancamentoList];
-      const newLancamentoModel = {
-        ...newLancamento,
-        hora: new Date(),
-        horaFormatted: formatHoraLancamento(new Date()),
-        minutesConverted: convertIntervaloParaTempo(newLancamento),
-      };
+      const newLancamentoModel = createObjetoLancamentoFrom(
+        newLancamento,
+        null
+      );
       newList[lacamentoIndex] = newLancamentoModel;
       setLancamentoList(newList);
       toast.success('Lancamento atualizado');
@@ -97,13 +94,10 @@ export default function useFuncoes({
         }
       });
       const lastId = idAux >= 0 ? idAux : 1;
-      const newLancamentoModel = {
-        ...newLancamento,
-        id: lastId + 1,
-        hora: new Date(),
-        horaFormatted: formatHoraLancamento(new Date()),
-        minutesConverted: convertIntervaloParaTempo(newLancamento),
-      };
+      const newLancamentoModel = createObjetoLancamentoFrom(
+        newLancamento,
+        lastId
+      );
       setLancamentoList([...lancamentoList, newLancamentoModel]);
       toast.success('Lancamento feito com sucesso');
     }
