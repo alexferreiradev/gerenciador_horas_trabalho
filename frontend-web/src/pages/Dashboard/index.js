@@ -119,26 +119,32 @@ function Dashboard() {
             tarefaEvolutiva={lancamento.tarefaEvolutiva}
             copied={lancamento.copied}
           >
-            <span>lancado em:{lancamento.horaFormatted} -</span>
-            <span>
-              {lancamento.intervalo}m ={'> '} {lancamento.minutesConverted} -
-            </span>
-            <span>OS#{lancamento.os} - </span>
-            <span>{lancamento.sistema} - </span>
-            <span>{lancamento.acao}</span>
-            <button
-              type="button"
-              onClick={() => handleEdit(lancamento)}
-              disabled={lancamento.copied}
-            >
-              Edit
-            </button>
-            <button type="button" onClick={() => handleCopy(lancamento)}>
-              {lancamento.tarefaEvolutiva ? 'Copy to Redmine' : 'Copy to OS'}
-            </button>
-            <button type="button" onClick={() => handleDelete(lancamento)}>
-              Remover
-            </button>
+            <div className="infos">
+              <span>lancado em:{lancamento.horaFormatted} -</span>
+              <span>
+                {lancamento.intervalo}m ={'> '} {lancamento.minutesConverted} -
+              </span>
+              <div hidden={lancamento.isIntervalo}>
+                <span>OS#{lancamento.os} - </span>
+                <span>{lancamento.sistema} - </span>
+              </div>
+              <span>{lancamento.acao}</span>
+            </div>
+            <div className="acoes">
+              <button
+                type="button"
+                onClick={() => handleEdit(lancamento)}
+                disabled={lancamento.copied}
+              >
+                Edit
+              </button>
+              <button type="button" onClick={() => handleCopy(lancamento)}>
+                {lancamento.textoBotaoAcao}
+              </button>
+              <button type="button" onClick={() => handleDelete(lancamento)}>
+                Remover
+              </button>
+            </div>
           </LancamentoItem>
         ))}
         <div className="container-new">
