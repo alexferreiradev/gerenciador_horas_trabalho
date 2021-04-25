@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - 20xx-xx-xx
 ### Added
+### Changed
+### Removed
+### Fixed
+
+## [0.3.0] - 2021-04-25
+### Added
 - funcao de cadastro de intervalos. São lancamentos de minutos que não serão contabilizados como lançados, mas sim na ultima hora lançada.
 ### Changed
 - Melhoria de código para facilitar adição de novas funcionalidades. Uso de hooks para declaração de funções, useMemo e useEffects, tornando o código do componente bem limpo.
