@@ -8,8 +8,8 @@ O dashboard é um html estático que poderá ser aberto em qualquer navegador co
 * Abra a pasta  e abra o arquivo `index.html` em seu navegador de sua preferência
 * Pronto, o dashboard será carrregado e poderá ser utilizado
 
-Os dados salvos será guardados por navegador e não serão apagados ao fechar o navegador.
+Os dados salvos são guardados por navegador e não serão apagados ao fechar o navegador.
 
 # Desenvolvendo novas funções
-O desenvolvimento de novas funções podem ser feitas utilizando o [README](./frontend-web/README.md) do projeto web
+O desenvolvimento de novas funções podem ser feitas utilizando o [README](./frontend-web/README.md) do projeto web. Caso queira contribuir, submeta um PR.
 
