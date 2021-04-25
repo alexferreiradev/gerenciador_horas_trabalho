@@ -83,7 +83,22 @@ const makeBackground = (props) => {
 };
 
 export const LancamentoItem = styled.div`
+  display: flex;
+  flex-direction: column;
+
   background: ${(props) => makeBackground(props)};
   border: 1px solid #999;
   padding: 2px;
+
+  div.infos {
+    display: flex;
+    flex-direction: row;
+
+    flex-wrap: wrap;
+  }
+
+  div.acoes {
+    display: flex;
+    flex-direction: row;
+  }
 `;
