@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Fixed
 
+## [0.4.0] - 2021-11-22
+### Added
+- Banco de horas: função para carregar e salvar minutos do banco de horas criado com horas extras ou devidas de lançamentos anteriores.
+### Changed
+### Removed
+### Fixed
+
 ## [0.3.0] - 2021-04-25
 ### Added
 - funcao de cadastro de intervalos. São lancamentos de minutos que não serão contabilizados como lançados, mas sim na ultima hora lançada.
@@ -63,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 [Unreleased]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/compare/v0.2.0...HEAD
+[0.4.0]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/compare/v0.3.0...v0.4.0
 [0.2.0]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/releases/tag/v0.0.1
