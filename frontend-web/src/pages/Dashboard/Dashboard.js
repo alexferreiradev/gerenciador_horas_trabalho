@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { KeyboardTimePicker } from '@material-ui/pickers';
-import { Checkbox } from 'semantic-ui-react';
+import { Button, Checkbox, Input, Modal } from 'semantic-ui-react';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 
 import useFuncoes from './useFuncoes';
@@ -22,15 +22,22 @@ function Dashboard() {
   });
   const [editing, setEditing] = useState(false);
   const [horaInicio, setHoraInicio] = useState();
+  const [isAlterBHOpen, setIsAlterBHOpen] = useState(false);
+  const [totalMinutesBH, setTotalMinutesBH] = useState(0);
+  const [totalMinutosBHInput, setTotalMinutosBHInput] = useState(
+    totalMinutesBH
+  );
 
   useEffects({
     lancamentoList,
     horaInicio,
     newLancamento,
+    totalMinutesBH,
     setOsSelected,
     setSistemaSelected,
     setLancamentoList,
     setHoraInicio,
+    setTotalMinutesBH,
   });
 
   const {
@@ -41,7 +48,8 @@ function Dashboard() {
     totalOS,
     osSelectList,
     sistemaSelectList,
-  } = useMemos({ lancamentoList, horaInicio });
+    totalBH,
+  } = useMemos({ lancamentoList, horaInicio, totalMinutesBH });
 
   const {
     handleCancelar,
@@ -49,12 +57,12 @@ function Dashboard() {
     handleEdit,
     handleCopy,
     handleDelete,
-    handleLimpar,
     promiseOSSelect,
     handleChangeOS,
     promiseSistemaSelect,
     handleChangeSistema,
     handleUnblockEdit,
+    handleUpdateBH,
   } = useFuncoes({
     setNewLancamento,
     setEditing,
@@ -65,6 +73,8 @@ function Dashboard() {
     sistemaSelectList,
     editing,
     osSelectList,
+    setIsAlterBHOpen,
+    setTotalMinutesBH,
   });
 
   return (
@@ -101,6 +111,16 @@ function Dashboard() {
           <li>
             <span>Total evolutivas trabalhada:</span>
             {totalTempoEvolutiva}
+          </li>
+          <li>
+            <span>Total no Banco de Horas:</span>
+            {totalBH}
+            <Button
+              icon="edit"
+              onClick={() => setIsAlterBHOpen(true)}
+              size="mini"
+              compact
+            />
           </li>
         </ul>
         {/* <button type="button" onKeyPress={() => handleLimpar()}>
@@ -201,7 +221,6 @@ function Dashboard() {
               onChange={(newV, action) => handleChangeSistema(newV, action)}
             />
             <textarea
-              type="text"
               value={newLancamento.acao}
               placeholder="Ação realizada"
               onChange={(e) =>
@@ -217,6 +236,25 @@ function Dashboard() {
           </button>
         </div>
       </ListaLancamento>
+      <Modal open={isAlterBHOpen}>
+        <Modal.Header>Alteração de Banco de Horas</Modal.Header>
+        <Modal.Content>
+          <Modal.Description>
+            Altere o Banco de Horas com os minutos desejados
+          </Modal.Description>
+          <Input
+            type="number"
+            value={totalMinutosBHInput}
+            onChange={(e) => setTotalMinutosBHInput(e.target.value)}
+          />
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={() => setIsAlterBHOpen(false)}>Cancelar</Button>
+          <Button onClick={() => handleUpdateBH(totalMinutosBHInput)}>
+            Alterar
+          </Button>
+        </Modal.Actions>
+      </Modal>
     </Container>
   );
 }
