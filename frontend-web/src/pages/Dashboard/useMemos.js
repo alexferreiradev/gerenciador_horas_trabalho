@@ -7,7 +7,11 @@ import {
 } from './utils';
 import { convertMinutesToObj, formatHoraMinuto } from '../../util/index';
 
-export default function useMemos({ lancamentoList, horaInicio }) {
+export default function useMemos({
+  lancamentoList,
+  horaInicio,
+  totalMinutesBH,
+}) {
   const lancamentosFiltered = useMemo(() => {
     return filterLancamentosWithIntervalo(lancamentoList);
   }, [lancamentoList]);
@@ -109,6 +113,13 @@ export default function useMemos({ lancamentoList, horaInicio }) {
     return 0;
   }, [osList]);
 
+  const totalBH = useMemo(() => {
+    return convertIntervaloParaTempo({
+      intervalo: totalMinutesBH,
+      tarefaEvolutiva: false,
+    });
+  }, [totalMinutesBH]);
+
   return {
     totalTempoCorretiva,
     totalTempoEvolutiva,
@@ -117,5 +128,6 @@ export default function useMemos({ lancamentoList, horaInicio }) {
     totalOS,
     osSelectList,
     sistemaSelectList,
+    totalBH,
   };
 }

@@ -15,6 +15,8 @@ export default function useFuncoes({
   sistemaSelectList,
   editing,
   osSelectList,
+  setIsAlterBHOpen,
+  setTotalMinutesBH,
 }) {
   function handleCancelar() {
     setNewLancamento(Constantes.emptyLancamento);
@@ -23,6 +25,7 @@ export default function useFuncoes({
   }
 
   function valideOrToast() {
+    // eslint-disable-next-line react/prop-types
     const MsgComponent = ({ msg }) => (
       <div>
         <h3>Preenchimento incorreto</h3>
@@ -66,11 +69,7 @@ export default function useFuncoes({
 
     if (lacamentoIndex >= 0) {
       const newList = [...lancamentoList];
-      const newLancamentoModel = createObjetoLancamentoFrom(
-        newLancamento,
-        null
-      );
-      newList[lacamentoIndex] = newLancamentoModel;
+      newList[lacamentoIndex] = createObjetoLancamentoFrom(newLancamento, null);
       setLancamentoList(newList);
       toast.success('Lancamento atualizado');
     } else {
@@ -186,6 +185,17 @@ export default function useFuncoes({
     setLancamentoList(newLancamentoList);
   }
 
+  function handleUpdateBH(totalBHValue) {
+    setIsAlterBHOpen(false);
+    if (!totalBHValue) {
+      console.error('Valor inserido para BH inválido');
+      return;
+    }
+
+    setTotalMinutesBH(totalBHValue);
+    console.info('Alterado BH para: ', totalBHValue);
+  }
+
   return {
     convertIntervaloParaTempo,
     handleCancelar,
@@ -199,5 +209,6 @@ export default function useFuncoes({
     promiseSistemaSelect,
     handleChangeSistema,
     handleUnblockEdit,
+    handleUpdateBH,
   };
 }
