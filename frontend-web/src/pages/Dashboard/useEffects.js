@@ -7,10 +7,12 @@ export default function useEffects({
   lancamentoList,
   horaInicio,
   newLancamento,
+  totalMinutesBH,
   setOsSelected,
   setSistemaSelected,
   setLancamentoList,
   setHoraInicio,
+  setTotalMinutesBH,
 }) {
   useEffect(() => {
     function saveInStorage() {
@@ -31,6 +33,16 @@ export default function useEffects({
 
     saveHoraInicioInStorage();
   }, [horaInicio]);
+
+  useEffect(() => {
+    function saveTotalBHInStorage() {
+      if (totalMinutesBH) {
+        localStorage.setItem('totalBH', totalMinutesBH);
+      }
+    }
+
+    saveTotalBHInStorage();
+  }, [totalMinutesBH]);
 
   useEffect(() => {
     setOsSelected({ value: newLancamento.os, label: newLancamento.os });
@@ -57,6 +69,7 @@ export default function useEffects({
             horaFormatted: formatHoraLancamento(new Date()),
             minutesConverted: `${hora}h, ${minuto}m`,
             intervalo,
+            tarefaEvolutiva: true,
             sistema: 'CRM',
             os: '123',
           },
@@ -73,8 +86,18 @@ export default function useEffects({
       }
     }
 
+    function loadTotalBHFromStorage() {
+      const totalLoadedFromStorange = localStorage.getItem('totalBH');
+      if (totalLoadedFromStorange) {
+        setTotalMinutesBH(totalLoadedFromStorange);
+      } else {
+        setTotalMinutesBH(0);
+      }
+    }
+
     loadFromStorage();
     loadDataInicioFromStorage();
+    loadTotalBHFromStorage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }
