@@ -135,6 +135,7 @@ export default function useFuncoes({
       const newList = [...lancamentoList];
       newList.splice(lancamentoIndex, 1);
       setLancamentoList(newList);
+      toast.success('Lançamento removido!');
     }
   }
 
