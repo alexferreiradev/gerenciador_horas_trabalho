@@ -14,6 +14,7 @@ export default function useEffects({
   setLancamentoList,
   setHoraInicio,
   setTotalMinutesBH,
+  setCurrentTime,
 }) {
   useEffect(() => {
     function saveInStorage() {
@@ -99,9 +100,16 @@ export default function useEffects({
       }
     }
 
+    function setupCurrentTimeUpdate() {
+      setInterval(() => {
+        setCurrentTime(new Date());
+      }, 30_000);
+    }
+
     loadFromStorage();
     loadDataInicioFromStorage();
     loadTotalBHFromStorage();
+    setupCurrentTimeUpdate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }
