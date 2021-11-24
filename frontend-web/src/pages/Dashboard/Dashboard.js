@@ -287,7 +287,13 @@ function Dashboard() {
         </Modal.Content>
         <Modal.Actions>
           <Button onClick={() => setConfirmDeleteOpen(false)}>Cancelar</Button>
-          <Button color="red" onClick={() => handleDelete(lancamentoToDelete)}>
+          <Button
+            color="red"
+            onClick={() => {
+              setConfirmDeleteOpen(false);
+              handleDelete(lancamentoToDelete);
+            }}
+          >
             Remover
           </Button>
         </Modal.Actions>
