@@ -28,6 +28,8 @@ function Dashboard() {
     totalMinutesBH
   );
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [lancamentoToDelete, setLancamentoToDelete] = useState({});
 
   useEffects({
     lancamentoList,
@@ -168,7 +170,13 @@ function Dashboard() {
               <button type="button" onClick={() => handleCopy(lancamento)}>
                 {lancamento.textoBotaoAcao}
               </button>
-              <button type="button" onClick={() => handleDelete(lancamento)}>
+              <button
+                type="button"
+                onClick={() => {
+                  setLancamentoToDelete(lancamento);
+                  setConfirmDeleteOpen(true);
+                }}
+              >
                 Remover
               </button>
             </div>
@@ -259,6 +267,28 @@ function Dashboard() {
           <Button onClick={() => setIsAlterBHOpen(false)}>Cancelar</Button>
           <Button onClick={() => handleUpdateBH(totalMinutosBHInput)}>
             Alterar
+          </Button>
+        </Modal.Actions>
+      </Modal>
+      <Modal open={isConfirmDeleteOpen}>
+        <Modal.Header>Confirma a remoção do lançamento</Modal.Header>
+        <Modal.Content>
+          <Modal.Description>
+            Você realmente deseja remover este lançamento ?
+            <br />
+            <br />
+            <span>Número tarefa: </span>
+            <b>{lancamentoToDelete?.os}</b>
+            <br />
+            <span>Ação: </span>
+            <b>{lancamentoToDelete?.acao}</b>
+            <br />
+          </Modal.Description>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={() => setConfirmDeleteOpen(false)}>Cancelar</Button>
+          <Button color="red" onClick={() => handleDelete(lancamentoToDelete)}>
+            Remover
           </Button>
         </Modal.Actions>
       </Modal>
