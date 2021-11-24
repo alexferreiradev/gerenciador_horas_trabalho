@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { setHours, setMinutes, parseISO, formatISO } from 'date-fns';
 
-import { convertMinutesToObj, formatHoraLancamento } from '../../util/index';
+import { convertMinutesToObj, formatHoraLancamento } from '../../util';
+import { createObjetoLancamentoFrom } from './utils';
 
 export default function useEffects({
   lancamentoList,
@@ -62,17 +63,20 @@ export default function useEffects({
         const intervalo = 15;
         const { hora, minuto } = convertMinutesToObj(intervalo);
         setLancamentoList([
-          {
-            id: 1,
-            acao: 'inicio trabalho',
-            hora: new Date(),
-            horaFormatted: formatHoraLancamento(new Date()),
-            minutesConverted: `${hora}h, ${minuto}m`,
-            intervalo,
-            tarefaEvolutiva: true,
-            sistema: 'CRM',
-            os: '123',
-          },
+          createObjetoLancamentoFrom(
+            {
+              id: 1,
+              acao: 'Inicio trabalho',
+              hora: new Date(),
+              horaFormatted: formatHoraLancamento(new Date()),
+              minutesConverted: `${hora}h, ${minuto}m`,
+              intervalo,
+              tarefaEvolutiva: true,
+              sistema: 'CRM',
+              os: '123',
+            },
+            undefined
+          ),
         ]);
       }
     }
