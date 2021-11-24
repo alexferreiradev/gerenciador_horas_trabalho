@@ -8,7 +8,7 @@ import useEffects from './useEffects';
 import useMemos from './useMemos';
 import Constantes from './Constantes';
 
-import { Container, Resumo, ListaLancamento, LancamentoItem } from './styles';
+import { Container, LancamentoItem, ListaLancamento, Resumo } from './styles';
 
 function Dashboard() {
   const [lancamentoList, setLancamentoList] = useState([]);
@@ -27,6 +27,7 @@ function Dashboard() {
   const [totalMinutosBHInput, setTotalMinutosBHInput] = useState(
     totalMinutesBH
   );
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffects({
     lancamentoList,
@@ -38,6 +39,7 @@ function Dashboard() {
     setLancamentoList,
     setHoraInicio,
     setTotalMinutesBH,
+    setCurrentTime,
   });
 
   const {
@@ -49,7 +51,8 @@ function Dashboard() {
     osSelectList,
     sistemaSelectList,
     totalBH,
-  } = useMemos({ lancamentoList, horaInicio, totalMinutesBH });
+    currentHour,
+  } = useMemos({ lancamentoList, horaInicio, totalMinutesBH, currentTime });
 
   const {
     handleCancelar,
@@ -99,6 +102,10 @@ function Dashboard() {
           <li>
             <span>Última hora lançada:</span>
             {horaFinalFormatted}
+          </li>
+          <li>
+            <span>Hora atual:</span>
+            {currentHour}
           </li>
           <li>
             <span>Total OS trabalhada:</span>

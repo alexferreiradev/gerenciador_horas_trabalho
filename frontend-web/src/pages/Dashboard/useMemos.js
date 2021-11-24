@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { addMinutes } from 'date-fns';
+import { addMinutes, format } from 'date-fns';
 
 import {
   convertIntervaloParaTempo,
@@ -11,6 +11,7 @@ export default function useMemos({
   lancamentoList,
   horaInicio,
   totalMinutesBH,
+  currentTime,
 }) {
   const lancamentosFiltered = useMemo(() => {
     return filterLancamentosWithIntervalo(lancamentoList);
@@ -120,6 +121,10 @@ export default function useMemos({
     });
   }, [totalMinutesBH]);
 
+  const currentHour = useMemo(() => {
+    return format(currentTime, 'HH:mm');
+  }, [currentTime]);
+
   return {
     totalTempoCorretiva,
     totalTempoEvolutiva,
@@ -129,5 +134,6 @@ export default function useMemos({
     osSelectList,
     sistemaSelectList,
     totalBH,
+    currentHour,
   };
 }
