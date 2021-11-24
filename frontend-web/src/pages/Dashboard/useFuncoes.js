@@ -42,22 +42,19 @@ export default function useFuncoes({
         'Intervalo inválido. Deve ser um número que indique os minutos trabalhados na OS'
       );
     }
+
     if (!isIntervalo) {
       if (newLancamento.os == null) {
         isInvalid = isInvalid || true;
-        msgErrorList.push('Número de OS inválido');
-      }
-      if (newLancamento.sistema == null) {
-        isInvalid = isInvalid || true;
-        msgErrorList.push('Sistema informado inválido');
+        msgErrorList.push('Descricao da tarefa inválida');
       }
       if (newLancamento.acao == null) {
         isInvalid = isInvalid || true;
         msgErrorList.push('Texto de ação é obrigatório');
       }
-
-      msgErrorList.map((error) => toast.error(<MsgComponent msg={error} />));
     }
+
+    msgErrorList.map((error) => toast.error(<MsgComponent msg={error} />));
 
     return isInvalid;
   }
