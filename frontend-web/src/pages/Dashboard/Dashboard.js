@@ -42,6 +42,7 @@ function Dashboard() {
     setHoraInicio,
     setTotalMinutesBH,
     setCurrentTime,
+    setTotalMinutosBHInput,
   });
 
   const {
