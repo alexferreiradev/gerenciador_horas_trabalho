@@ -30,6 +30,7 @@ function Dashboard() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [lancamentoToDelete, setLancamentoToDelete] = useState({});
+  const [exportingJSON, setExportingJSON] = useState(false);
 
   useEffects({
     lancamentoList,
@@ -43,6 +44,8 @@ function Dashboard() {
     setTotalMinutesBH,
     setCurrentTime,
     setTotalMinutosBHInput,
+    exportingJSON,
+    setExportingJSON,
   });
 
   const {
@@ -55,7 +58,14 @@ function Dashboard() {
     sistemaSelectList,
     totalBH,
     currentHour,
-  } = useMemos({ lancamentoList, horaInicio, totalMinutesBH, currentTime });
+    exportState,
+  } = useMemos({
+    lancamentoList,
+    horaInicio,
+    totalMinutesBH,
+    currentTime,
+    exportingJSON,
+  });
 
   const {
     handleCancelar,
@@ -69,6 +79,7 @@ function Dashboard() {
     handleChangeSistema,
     handleUnblockEdit,
     handleUpdateBH,
+    handleExportJson,
   } = useFuncoes({
     setNewLancamento,
     setEditing,
@@ -81,6 +92,7 @@ function Dashboard() {
     osSelectList,
     setIsAlterBHOpen,
     setTotalMinutesBH,
+    setExportingJSON,
   });
 
   return (
@@ -139,6 +151,11 @@ function Dashboard() {
         <button type="button" onClick={() => handleUnblockEdit()}>
           Desbloquear ediçao para todos
         </button>
+        <Button
+          icon={exportState.icon}
+          onClick={() => handleExportJson()}
+          content={exportState.label}
+        />
       </Resumo>
       <ListaLancamento>
         <h1>Lista de lancamentos</h1>
