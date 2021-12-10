@@ -15,6 +15,7 @@ export default function useEffects({
   setHoraInicio,
   setTotalMinutesBH,
   setCurrentTime,
+  setTotalMinutosBHInput,
 }) {
   useEffect(() => {
     function saveInStorage() {
@@ -53,6 +54,10 @@ export default function useEffects({
       label: newLancamento.sistema,
     });
   }, [newLancamento, setSistemaSelected, setOsSelected]);
+
+  useEffect(() => {
+    setTotalMinutosBHInput(totalMinutesBH);
+  }, [totalMinutesBH, setTotalMinutosBHInput]);
 
   useEffect(() => {
     function loadFromStorage() {
