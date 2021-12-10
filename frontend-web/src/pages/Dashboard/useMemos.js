@@ -12,6 +12,7 @@ export default function useMemos({
   horaInicio,
   totalMinutesBH,
   currentTime,
+  exportingJSON,
 }) {
   const lancamentosFiltered = useMemo(() => {
     return filterLancamentosWithIntervalo(lancamentoList);
@@ -125,6 +126,15 @@ export default function useMemos({
     return format(currentTime, 'HH:mm');
   }, [currentTime]);
 
+  const exportState = useMemo(() => {
+    return {
+      icon: exportingJSON ? 'wait' : 'download',
+      label: exportingJSON
+        ? 'Aguarde, gerando arquivo...'
+        : 'Exportar como JSON',
+    };
+  }, [exportingJSON]);
+
   return {
     totalTempoCorretiva,
     totalTempoEvolutiva,
@@ -135,5 +145,6 @@ export default function useMemos({
     sistemaSelectList,
     totalBH,
     currentHour,
+    exportState,
   };
 }
