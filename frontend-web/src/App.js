@@ -8,6 +8,7 @@ import history from './services/history';
 import Global from './styles/global';
 import Header from './components/Header';
 import Dashboard from './pages/Dashboard';
+import Footer from './pages/Footer';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Header />
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Dashboard />
+        <Footer />
       </MuiPickersUtilsProvider>
       <Global />
       <ToastContainer autoClose={3000} />
