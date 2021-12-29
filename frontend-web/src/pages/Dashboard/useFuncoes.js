@@ -17,6 +17,7 @@ export default function useFuncoes({
   osSelectList,
   setIsAlterBHOpen,
   setTotalMinutesBH,
+  setExportingJSON,
 }) {
   function handleCancelar() {
     setNewLancamento(Constantes.emptyLancamento);
@@ -194,6 +195,11 @@ export default function useFuncoes({
     console.info('Alterado BH para: ', totalBHValue);
   }
 
+  function handleExportJson() {
+    console.info('Inicio de exportação de JSON');
+    setExportingJSON(true);
+  }
+
   return {
     convertIntervaloParaTempo,
     handleCancelar,
@@ -208,5 +214,6 @@ export default function useFuncoes({
     handleChangeSistema,
     handleUnblockEdit,
     handleUpdateBH,
+    handleExportJson,
   };
 }

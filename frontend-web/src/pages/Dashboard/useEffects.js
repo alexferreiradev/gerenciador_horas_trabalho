@@ -3,6 +3,7 @@ import { setHours, setMinutes, parseISO, formatISO } from 'date-fns';
 
 import { convertMinutesToObj, formatHoraLancamento } from '../../util';
 import { createObjetoLancamentoFrom } from './utils';
+import exportJSON from '../../services/exportJson';
 
 export default function useEffects({
   lancamentoList,
@@ -16,6 +17,8 @@ export default function useEffects({
   setTotalMinutesBH,
   setCurrentTime,
   setTotalMinutosBHInput,
+  exportingJSON,
+  setExportingJSON,
 }) {
   useEffect(() => {
     function saveInStorage() {
@@ -58,6 +61,15 @@ export default function useEffects({
   useEffect(() => {
     setTotalMinutosBHInput(totalMinutesBH);
   }, [totalMinutesBH, setTotalMinutosBHInput]);
+
+  useEffect(() => {
+    if (exportingJSON) {
+      console.info('Gerando arquivo JSON para exportação');
+      exportJSON(horaInicio, lancamentoList);
+      console.info('Arquivo para exportação gerado');
+      setExportingJSON(false);
+    }
+  }, [exportingJSON, horaInicio, lancamentoList]);
 
   useEffect(() => {
     function loadFromStorage() {

@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - 20xx-xx-xx
 ### Added
+- Confirmação de remoção de lançamento: adição de modal antes de remover
+- Exportação de dados: cria um json com todos dados cadastrados para download.
 ### Changed
 ### Removed
 ### Fixed
