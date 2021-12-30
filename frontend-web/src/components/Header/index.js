@@ -5,9 +5,7 @@ import { Container } from './styles';
 function Header() {
   return (
     <Container>
-      <span>
-        {process.env.REACT_APP_NAME} - {process.env.REACT_APP_VERSION}
-      </span>
+      <span>{process.env.REACT_APP_NAME}</span>
     </Container>
   );
 }
