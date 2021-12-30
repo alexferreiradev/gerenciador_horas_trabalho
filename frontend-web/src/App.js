@@ -10,13 +10,17 @@ import Header from './components/Header';
 import Dashboard from './pages/Dashboard';
 import Footer from './pages/Footer';
 
+import { Container } from './styles';
+
 function App() {
   return (
     <Router history={history}>
-      <Header />
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Dashboard />
-        <Footer />
+        <Container>
+          <Header />
+          <Dashboard />
+          <Footer />
+        </Container>
       </MuiPickersUtilsProvider>
       <Global />
       <ToastContainer autoClose={3000} />
