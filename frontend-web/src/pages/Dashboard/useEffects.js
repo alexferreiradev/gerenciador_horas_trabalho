@@ -65,11 +65,17 @@ export default function useEffects({
   useEffect(() => {
     if (exportingJSON) {
       console.info('Gerando arquivo JSON para exportação');
-      exportJSON(horaInicio, lancamentoList);
+      exportJSON(horaInicio, lancamentoList, totalMinutesBH);
       console.info('Arquivo para exportação gerado');
       setExportingJSON(false);
     }
-  }, [exportingJSON, horaInicio, lancamentoList]);
+  }, [
+    exportingJSON,
+    horaInicio,
+    lancamentoList,
+    totalMinutesBH,
+    setExportingJSON,
+  ]);
 
   useEffect(() => {
     function loadFromStorage() {

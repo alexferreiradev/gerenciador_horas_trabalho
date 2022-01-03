@@ -1,8 +1,9 @@
 import { format } from 'date-fns';
 
-function exportJSON(horaInicio, lancamentoList) {
+function exportJSON(horaInicio, lancamentoList, totalBHMinutes) {
   const jsonToExport = {
     horaInicio,
+    totalBHMinutes,
     lancamentoList,
   };
 
