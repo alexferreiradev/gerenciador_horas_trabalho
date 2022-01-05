@@ -2,8 +2,9 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import * as clipboard from 'clipboard-polyfill/text';
 
-import { convertIntervaloParaTempo, createObjetoLancamentoFrom } from './utils';
+import { createObjetoLancamentoFrom } from './utils';
 import Constantes from './Constantes';
+import { convertMinutesToObj, formatHoraLancamento } from '../../util';
 
 export default function useFuncoes({
   setNewLancamento,
@@ -18,6 +19,7 @@ export default function useFuncoes({
   setIsAlterBHOpen,
   setTotalMinutesBH,
   setExportingJSON,
+  setConfirmStartDayShowing,
 }) {
   function handleCancelar() {
     setNewLancamento(Constantes.emptyLancamento);
@@ -140,8 +142,34 @@ export default function useFuncoes({
     }
   }
 
-  function handleLimpar() {
-    setLancamentoList([]);
+  function executeStartDay() {
+    const intervalo = 15;
+    const { hora, minuto } = convertMinutesToObj(intervalo);
+    setLancamentoList([
+      createObjetoLancamentoFrom(
+        {
+          id: 1,
+          acao: 'Inicio trabalho',
+          hora: new Date(),
+          horaFormatted: formatHoraLancamento(new Date()),
+          minutesConverted: `${hora}h, ${minuto}m`,
+          intervalo,
+          tarefaEvolutiva: true,
+          sistema: '',
+          os: 'Work',
+        },
+        undefined
+      ),
+    ]);
+  }
+
+  function handleStartDay(isConfirmStartDayShowing) {
+    if (isConfirmStartDayShowing) {
+      setConfirmStartDayShowing(false);
+      executeStartDay();
+    } else {
+      setConfirmStartDayShowing(true);
+    }
   }
 
   function promiseOSSelect(inputValue) {
@@ -201,13 +229,11 @@ export default function useFuncoes({
   }
 
   return {
-    convertIntervaloParaTempo,
     handleCancelar,
     handleLancar,
     handleEdit,
     handleCopy,
     handleDelete,
-    handleLimpar,
     promiseOSSelect,
     handleChangeOS,
     promiseSistemaSelect,
@@ -215,5 +241,6 @@ export default function useFuncoes({
     handleUnblockEdit,
     handleUpdateBH,
     handleExportJson,
+    handleStartDay,
   };
 }
