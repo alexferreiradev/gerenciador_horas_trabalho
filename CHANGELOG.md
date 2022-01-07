@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Confirmação de remoção de lançamento: adição de modal antes de remover
 - Exportação de dados: cria um json com todos dados cadastrados para download.
+- Iniciar dia: remove todos lançamentos e adiciona o do inicio de dia.
 ### Changed
 ### Removed
 ### Fixed
