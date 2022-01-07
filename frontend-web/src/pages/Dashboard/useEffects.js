@@ -96,8 +96,8 @@ export default function useEffects({
               minutesConverted: `${hora}h, ${minuto}m`,
               intervalo,
               tarefaEvolutiva: true,
-              sistema: 'CRM',
-              os: '123',
+              sistema: '',
+              os: 'Work',
             },
             undefined
           ),

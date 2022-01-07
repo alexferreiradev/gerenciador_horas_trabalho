@@ -31,6 +31,7 @@ function Dashboard() {
   const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [lancamentoToDelete, setLancamentoToDelete] = useState({});
   const [exportingJSON, setExportingJSON] = useState(false);
+  const [isConfirmStartDayShowing, setConfirmStartDayShowing] = useState(false);
 
   useEffects({
     lancamentoList,
@@ -80,6 +81,7 @@ function Dashboard() {
     handleUnblockEdit,
     handleUpdateBH,
     handleExportJson,
+    handleStartDay,
   } = useFuncoes({
     setNewLancamento,
     setEditing,
@@ -93,6 +95,7 @@ function Dashboard() {
     setIsAlterBHOpen,
     setTotalMinutesBH,
     setExportingJSON,
+    setConfirmStartDayShowing,
   });
 
   return (
@@ -145,9 +148,6 @@ function Dashboard() {
             />
           </li>
         </ul>
-        {/* <button type="button" onKeyPress={() => handleLimpar()}>
-          Limpar
-        </button> */}
         <button type="button" onClick={() => handleUnblockEdit()}>
           Desbloquear ediçao para todos
         </button>
@@ -155,6 +155,12 @@ function Dashboard() {
           icon={exportState.icon}
           onClick={() => handleExportJson()}
           content={exportState.label}
+        />
+        <Button
+          secondary
+          icon="sync alternate"
+          onClick={() => handleStartDay(isConfirmStartDayShowing)}
+          content="Iniciar Dia"
         />
       </Resumo>
       <ListaLancamento>
@@ -313,6 +319,33 @@ function Dashboard() {
             }}
           >
             Remover
+          </Button>
+        </Modal.Actions>
+      </Modal>
+      <Modal open={isConfirmStartDayShowing}>
+        <Modal.Header>Confirma o início de dia</Modal.Header>
+        <Modal.Content>
+          <Modal.Description>
+            Esta ação irá remover todos lançamentos, inclusive bloqueados, e não
+            poderá ser desfeita. Gostaria de continuar ?
+            <br />
+            <br />
+            <span>Total de lançamentos a ser removido: </span>
+            <b>{lancamentoList?.length}</b>
+            <br />
+          </Modal.Description>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={() => setConfirmStartDayShowing(false)}>
+            Cancelar
+          </Button>
+          <Button
+            color="red"
+            onClick={() => {
+              handleStartDay(isConfirmStartDayShowing);
+            }}
+          >
+            Iniciar o dia
           </Button>
         </Modal.Actions>
       </Modal>
