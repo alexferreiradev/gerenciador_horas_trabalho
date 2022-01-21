@@ -14,6 +14,12 @@ function Footer() {
           GitHub
         </a>
       </div>
+      <div>
+        Aprenda a utilizar com a{' '}
+        <a href="https://github.com/alexferreiradev/gerenciador_horas_trabalho/wiki">
+          Wiki
+        </a>
+      </div>
       <div>Versão: {process.env.REACT_APP_VERSION}</div>
     </Container>
   );
