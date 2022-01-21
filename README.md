@@ -10,6 +10,10 @@ O dashboard é um html estático que poderá ser aberto em qualquer navegador co
 
 Os dados salvos são guardados por navegador e não serão apagados ao fechar o navegador.
 
+## Aprenda a utilizar
+
+Aprenda a utiliza o dashboard através da nossa [wiki](./wiki)
+
 # Desenvolvendo novas funções
 O desenvolvimento de novas funções podem ser feitas utilizando o [README](./frontend-web/README.md) do projeto web. Caso queira contribuir, submeta um PR.
 
