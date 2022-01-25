@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 import { setHours, setMinutes, parseISO, formatISO } from 'date-fns';
 
-import { convertMinutesToObj, formatHoraLancamento } from '../../util/index';
+import { convertMinutesToObj, formatHoraLancamento } from '../../util';
+import { createObjetoLancamentoFrom } from './utils';
+import exportJSON from '../../services/exportJson';
 
 export default function useEffects({
   lancamentoList,
@@ -13,6 +15,10 @@ export default function useEffects({
   setLancamentoList,
   setHoraInicio,
   setTotalMinutesBH,
+  setCurrentTime,
+  setTotalMinutosBHInput,
+  exportingJSON,
+  setExportingJSON,
 }) {
   useEffect(() => {
     function saveInStorage() {
@@ -53,6 +59,25 @@ export default function useEffects({
   }, [newLancamento, setSistemaSelected, setOsSelected]);
 
   useEffect(() => {
+    setTotalMinutosBHInput(totalMinutesBH);
+  }, [totalMinutesBH, setTotalMinutosBHInput]);
+
+  useEffect(() => {
+    if (exportingJSON) {
+      console.info('Gerando arquivo JSON para exportação');
+      exportJSON(horaInicio, lancamentoList, totalMinutesBH);
+      console.info('Arquivo para exportação gerado');
+      setExportingJSON(false);
+    }
+  }, [
+    exportingJSON,
+    horaInicio,
+    lancamentoList,
+    totalMinutesBH,
+    setExportingJSON,
+  ]);
+
+  useEffect(() => {
     function loadFromStorage() {
       const lancamentoListJson = localStorage.getItem('lancamentos');
       const lancamentoListParsed = JSON.parse(lancamentoListJson);
@@ -62,17 +87,20 @@ export default function useEffects({
         const intervalo = 15;
         const { hora, minuto } = convertMinutesToObj(intervalo);
         setLancamentoList([
-          {
-            id: 1,
-            acao: 'inicio trabalho',
-            hora: new Date(),
-            horaFormatted: formatHoraLancamento(new Date()),
-            minutesConverted: `${hora}h, ${minuto}m`,
-            intervalo,
-            tarefaEvolutiva: true,
-            sistema: 'CRM',
-            os: '123',
-          },
+          createObjetoLancamentoFrom(
+            {
+              id: 1,
+              acao: 'Inicio trabalho',
+              hora: new Date(),
+              horaFormatted: formatHoraLancamento(new Date()),
+              minutesConverted: `${hora}h, ${minuto}m`,
+              intervalo,
+              tarefaEvolutiva: true,
+              sistema: '',
+              os: 'Work',
+            },
+            undefined
+          ),
         ]);
       }
     }
@@ -95,9 +123,16 @@ export default function useEffects({
       }
     }
 
+    function setupCurrentTimeUpdate() {
+      setInterval(() => {
+        setCurrentTime(new Date());
+      }, 30_000);
+    }
+
     loadFromStorage();
     loadDataInicioFromStorage();
     loadTotalBHFromStorage();
+    setupCurrentTimeUpdate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }

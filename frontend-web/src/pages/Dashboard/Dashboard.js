@@ -8,7 +8,7 @@ import useEffects from './useEffects';
 import useMemos from './useMemos';
 import Constantes from './Constantes';
 
-import { Container, Resumo, ListaLancamento, LancamentoItem } from './styles';
+import { Container, LancamentoItem, ListaLancamento, Resumo } from './styles';
 
 function Dashboard() {
   const [lancamentoList, setLancamentoList] = useState([]);
@@ -27,6 +27,11 @@ function Dashboard() {
   const [totalMinutosBHInput, setTotalMinutosBHInput] = useState(
     totalMinutesBH
   );
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [lancamentoToDelete, setLancamentoToDelete] = useState({});
+  const [exportingJSON, setExportingJSON] = useState(false);
+  const [isConfirmStartDayShowing, setConfirmStartDayShowing] = useState(false);
 
   useEffects({
     lancamentoList,
@@ -38,6 +43,10 @@ function Dashboard() {
     setLancamentoList,
     setHoraInicio,
     setTotalMinutesBH,
+    setCurrentTime,
+    setTotalMinutosBHInput,
+    exportingJSON,
+    setExportingJSON,
   });
 
   const {
@@ -49,7 +58,15 @@ function Dashboard() {
     osSelectList,
     sistemaSelectList,
     totalBH,
-  } = useMemos({ lancamentoList, horaInicio, totalMinutesBH });
+    currentHour,
+    exportState,
+  } = useMemos({
+    lancamentoList,
+    horaInicio,
+    totalMinutesBH,
+    currentTime,
+    exportingJSON,
+  });
 
   const {
     handleCancelar,
@@ -63,6 +80,8 @@ function Dashboard() {
     handleChangeSistema,
     handleUnblockEdit,
     handleUpdateBH,
+    handleExportJson,
+    handleStartDay,
   } = useFuncoes({
     setNewLancamento,
     setEditing,
@@ -75,6 +94,8 @@ function Dashboard() {
     osSelectList,
     setIsAlterBHOpen,
     setTotalMinutesBH,
+    setExportingJSON,
+    setConfirmStartDayShowing,
   });
 
   return (
@@ -101,6 +122,10 @@ function Dashboard() {
             {horaFinalFormatted}
           </li>
           <li>
+            <span>Hora atual:</span>
+            {currentHour}
+          </li>
+          <li>
             <span>Total OS trabalhada:</span>
             {totalOS}
           </li>
@@ -123,12 +148,20 @@ function Dashboard() {
             />
           </li>
         </ul>
-        {/* <button type="button" onKeyPress={() => handleLimpar()}>
-          Limpar
-        </button> */}
         <button type="button" onClick={() => handleUnblockEdit()}>
           Desbloquear ediçao para todos
         </button>
+        <Button
+          icon={exportState.icon}
+          onClick={() => handleExportJson()}
+          content={exportState.label}
+        />
+        <Button
+          secondary
+          icon="sync alternate"
+          onClick={() => handleStartDay(isConfirmStartDayShowing)}
+          content="Iniciar Dia"
+        />
       </Resumo>
       <ListaLancamento>
         <h1>Lista de lancamentos</h1>
@@ -161,7 +194,13 @@ function Dashboard() {
               <button type="button" onClick={() => handleCopy(lancamento)}>
                 {lancamento.textoBotaoAcao}
               </button>
-              <button type="button" onClick={() => handleDelete(lancamento)}>
+              <button
+                type="button"
+                onClick={() => {
+                  setLancamentoToDelete(lancamento);
+                  setConfirmDeleteOpen(true);
+                }}
+              >
                 Remover
               </button>
             </div>
@@ -252,6 +291,61 @@ function Dashboard() {
           <Button onClick={() => setIsAlterBHOpen(false)}>Cancelar</Button>
           <Button onClick={() => handleUpdateBH(totalMinutosBHInput)}>
             Alterar
+          </Button>
+        </Modal.Actions>
+      </Modal>
+      <Modal open={isConfirmDeleteOpen}>
+        <Modal.Header>Confirma a remoção do lançamento</Modal.Header>
+        <Modal.Content>
+          <Modal.Description>
+            Você realmente deseja remover este lançamento ?
+            <br />
+            <br />
+            <span>Número tarefa: </span>
+            <b>{lancamentoToDelete?.os}</b>
+            <br />
+            <span>Ação: </span>
+            <b>{lancamentoToDelete?.acao}</b>
+            <br />
+          </Modal.Description>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={() => setConfirmDeleteOpen(false)}>Cancelar</Button>
+          <Button
+            color="red"
+            onClick={() => {
+              setConfirmDeleteOpen(false);
+              handleDelete(lancamentoToDelete);
+            }}
+          >
+            Remover
+          </Button>
+        </Modal.Actions>
+      </Modal>
+      <Modal open={isConfirmStartDayShowing}>
+        <Modal.Header>Confirma o início de dia</Modal.Header>
+        <Modal.Content>
+          <Modal.Description>
+            Esta ação irá remover todos lançamentos, inclusive bloqueados, e não
+            poderá ser desfeita. Gostaria de continuar ?
+            <br />
+            <br />
+            <span>Total de lançamentos a ser removido: </span>
+            <b>{lancamentoList?.length}</b>
+            <br />
+          </Modal.Description>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={() => setConfirmStartDayShowing(false)}>
+            Cancelar
+          </Button>
+          <Button
+            color="red"
+            onClick={() => {
+              handleStartDay(isConfirmStartDayShowing);
+            }}
+          >
+            Iniciar o dia
           </Button>
         </Modal.Actions>
       </Modal>

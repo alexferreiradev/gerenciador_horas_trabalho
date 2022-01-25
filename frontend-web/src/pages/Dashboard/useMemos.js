@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { addMinutes } from 'date-fns';
+import { addMinutes, format } from 'date-fns';
 
 import {
   convertIntervaloParaTempo,
@@ -11,6 +11,8 @@ export default function useMemos({
   lancamentoList,
   horaInicio,
   totalMinutesBH,
+  currentTime,
+  exportingJSON,
 }) {
   const lancamentosFiltered = useMemo(() => {
     return filterLancamentosWithIntervalo(lancamentoList);
@@ -120,6 +122,19 @@ export default function useMemos({
     });
   }, [totalMinutesBH]);
 
+  const currentHour = useMemo(() => {
+    return format(currentTime, 'HH:mm');
+  }, [currentTime]);
+
+  const exportState = useMemo(() => {
+    return {
+      icon: exportingJSON ? 'wait' : 'download',
+      label: exportingJSON
+        ? 'Aguarde, gerando arquivo...'
+        : 'Exportar como JSON',
+    };
+  }, [exportingJSON]);
+
   return {
     totalTempoCorretiva,
     totalTempoEvolutiva,
@@ -129,5 +144,7 @@ export default function useMemos({
     osSelectList,
     sistemaSelectList,
     totalBH,
+    currentHour,
+    exportState,
   };
 }

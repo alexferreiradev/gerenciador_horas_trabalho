@@ -2,8 +2,9 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import * as clipboard from 'clipboard-polyfill/text';
 
-import { convertIntervaloParaTempo, createObjetoLancamentoFrom } from './utils';
+import { createObjetoLancamentoFrom } from './utils';
 import Constantes from './Constantes';
+import { convertMinutesToObj, formatHoraLancamento } from '../../util';
 
 export default function useFuncoes({
   setNewLancamento,
@@ -17,6 +18,8 @@ export default function useFuncoes({
   osSelectList,
   setIsAlterBHOpen,
   setTotalMinutesBH,
+  setExportingJSON,
+  setConfirmStartDayShowing,
 }) {
   function handleCancelar() {
     setNewLancamento(Constantes.emptyLancamento);
@@ -42,22 +45,19 @@ export default function useFuncoes({
         'Intervalo inválido. Deve ser um número que indique os minutos trabalhados na OS'
       );
     }
+
     if (!isIntervalo) {
       if (newLancamento.os == null) {
         isInvalid = isInvalid || true;
-        msgErrorList.push('Número de OS inválido');
-      }
-      if (newLancamento.sistema == null) {
-        isInvalid = isInvalid || true;
-        msgErrorList.push('Sistema informado inválido');
+        msgErrorList.push('Descricao da tarefa inválida');
       }
       if (newLancamento.acao == null) {
         isInvalid = isInvalid || true;
         msgErrorList.push('Texto de ação é obrigatório');
       }
-
-      msgErrorList.map((error) => toast.error(<MsgComponent msg={error} />));
     }
+
+    msgErrorList.map((error) => toast.error(<MsgComponent msg={error} />));
 
     return isInvalid;
   }
@@ -138,11 +138,38 @@ export default function useFuncoes({
       const newList = [...lancamentoList];
       newList.splice(lancamentoIndex, 1);
       setLancamentoList(newList);
+      toast.success('Lançamento removido!');
     }
   }
 
-  function handleLimpar() {
-    setLancamentoList([]);
+  function executeStartDay() {
+    const intervalo = 15;
+    const { hora, minuto } = convertMinutesToObj(intervalo);
+    setLancamentoList([
+      createObjetoLancamentoFrom(
+        {
+          id: 1,
+          acao: 'Inicio trabalho',
+          hora: new Date(),
+          horaFormatted: formatHoraLancamento(new Date()),
+          minutesConverted: `${hora}h, ${minuto}m`,
+          intervalo,
+          tarefaEvolutiva: true,
+          sistema: '',
+          os: 'Work',
+        },
+        undefined
+      ),
+    ]);
+  }
+
+  function handleStartDay(isConfirmStartDayShowing) {
+    if (isConfirmStartDayShowing) {
+      setConfirmStartDayShowing(false);
+      executeStartDay();
+    } else {
+      setConfirmStartDayShowing(true);
+    }
   }
 
   function promiseOSSelect(inputValue) {
@@ -196,19 +223,24 @@ export default function useFuncoes({
     console.info('Alterado BH para: ', totalBHValue);
   }
 
+  function handleExportJson() {
+    console.info('Inicio de exportação de JSON');
+    setExportingJSON(true);
+  }
+
   return {
-    convertIntervaloParaTempo,
     handleCancelar,
     handleLancar,
     handleEdit,
     handleCopy,
     handleDelete,
-    handleLimpar,
     promiseOSSelect,
     handleChangeOS,
     promiseSistemaSelect,
     handleChangeSistema,
     handleUnblockEdit,
     handleUpdateBH,
+    handleExportJson,
+    handleStartDay,
   };
 }
