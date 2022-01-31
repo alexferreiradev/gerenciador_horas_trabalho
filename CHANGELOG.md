@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 ### Removed
 ### Fixed
+- botão lançar sem margins: gerava cliques acidentais no botão de cancelar, cancelando uma edição, fazendo perder textos longos digitados. (#60)
 
 ## [0.5.0] - 2022-01-24
 
