@@ -8,7 +8,13 @@ import useEffects from './useEffects';
 import useMemos from './useMemos';
 import Constantes from './Constantes';
 
-import { Container, LancamentoItem, ListaLancamento, Resumo } from './styles';
+import {
+  Container,
+  LancamentoItem,
+  ListaLancamento,
+  Resumo,
+  NewBt,
+} from './styles';
 
 function Dashboard() {
   const [lancamentoList, setLancamentoList] = useState([]);
@@ -267,12 +273,10 @@ function Dashboard() {
               }
             />
           </div>
-          <button type="button" onClick={(e) => handleLancar(e)}>
+          <NewBt color="black" onClick={(e) => handleLancar(e)}>
             Lançar
-          </button>
-          <button type="button" onClick={(e) => handleCancelar(e)}>
-            Cancelar
-          </button>
+          </NewBt>
+          <NewBt onClick={(e) => handleCancelar(e)}>Cancelar</NewBt>
         </div>
       </ListaLancamento>
       <Modal open={isAlterBHOpen}>
