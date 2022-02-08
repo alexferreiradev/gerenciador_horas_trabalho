@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Button } from 'semantic-ui-react';
 
 export const Container = styled.div`
   display: flex;
@@ -81,6 +82,12 @@ const makeBackground = (props) => {
   if (tarefaEvolutiva) return '#bbb';
   return 'transparent';
 };
+
+export const NewBt = styled(Button)`
+  &.ui.button {
+    margin-top: 16px;
+  }
+`;
 
 export const LancamentoItem = styled.div`
   display: flex;
