@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 20xx-xx-xx
 ### Added
 - Função daily: gerar um texto para mapa mental co todos os lançamentos feitos e descrições copiado para área de transferencia
+- Atalho para lançamento: atalho de teclado para agilizar os lançamentos
 ### Changed
 ### Removed
 ### Fixed
