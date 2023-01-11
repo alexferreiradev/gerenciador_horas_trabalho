@@ -234,6 +234,10 @@ export default function useFuncoes({
     setExportingJSON(true);
   }
 
+  function changeFocusTo(id) {
+    document.getElementById(id).focus();
+  }
+
   return {
     handleCancelar,
     handleLancar,
@@ -248,5 +252,6 @@ export default function useFuncoes({
     handleUpdateBH,
     handleExportJson,
     handleStartDay,
+    changeFocusTo,
   };
 }
