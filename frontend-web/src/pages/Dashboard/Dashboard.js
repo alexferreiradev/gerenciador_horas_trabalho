@@ -213,7 +213,14 @@ function Dashboard() {
             </div>
           </LancamentoItem>
         ))}
-        <div className="container-new">
+        <div className="container-new" 
+          onKeyPress={(e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+              handleLancar(e)
+              changeFocusTo('input-minutos');
+            }
+          }}
+        >
           <div className="container-first-line">
             <input
               type="Number"
