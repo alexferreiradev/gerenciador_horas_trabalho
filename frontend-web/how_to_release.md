@@ -10,7 +10,7 @@ O planejamento de release deste repositório é git-flow. Portanto, a branch `de
 * crie PR desta nova branch para master
 * faça merge da PR
 * crie uma release no github para esta nova versão a partir da main
-* gere um build a partir da main
+* gere um build a partir da main e renomeie a pasta build para o nome do sistema com a versão
 * faça upload do zip do build na release
 * publique a versão
 
