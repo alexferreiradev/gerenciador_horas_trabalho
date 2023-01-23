@@ -5,6 +5,7 @@ import * as clipboard from 'clipboard-polyfill/text';
 import { createObjetoLancamentoFrom } from './utils';
 import Constantes from './Constantes';
 import { convertMinutesToObj, formatHoraLancamento } from '../../util';
+import exportDaily from '../../services/exportDaily';
 
 export default function useFuncoes({
   setNewLancamento,
@@ -143,6 +144,9 @@ export default function useFuncoes({
   }
 
   function executeStartDay() {
+    const exportDailyText = exportDaily(lancamentoList)
+    clipboard.writeText(exportDailyText);
+
     const intervalo = 15;
     const { hora, minuto } = convertMinutesToObj(intervalo);
     setLancamentoList([
@@ -161,6 +165,8 @@ export default function useFuncoes({
         undefined
       ),
     ]);
+    
+    toast.success("Seu dia começou e seus lançamentos anteriores foram exportados para área de transferência");
   }
 
   function handleStartDay(isConfirmStartDayShowing) {
@@ -228,6 +234,10 @@ export default function useFuncoes({
     setExportingJSON(true);
   }
 
+  function changeFocusTo(id) {
+    document.getElementById(id).focus();
+  }
+
   return {
     handleCancelar,
     handleLancar,
@@ -242,5 +252,6 @@ export default function useFuncoes({
     handleUpdateBH,
     handleExportJson,
     handleStartDay,
+    changeFocusTo,
   };
 }

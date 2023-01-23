@@ -1,7 +1,7 @@
 {
-  "name": "lancador-horas",
-  "app-name": "Lançador de horas",
-  "version": "0.5.1",
+  "name": "horas-talento",
+  "app-name": "Horas de Talento",
+  "version": "0.6.0",
   "private": true,
   "homepage": ".",
   "dependencies": {

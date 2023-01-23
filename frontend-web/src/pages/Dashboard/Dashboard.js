@@ -88,6 +88,7 @@ function Dashboard() {
     handleUpdateBH,
     handleExportJson,
     handleStartDay,
+    changeFocusTo,
   } = useFuncoes({
     setNewLancamento,
     setEditing,
@@ -212,10 +213,18 @@ function Dashboard() {
             </div>
           </LancamentoItem>
         ))}
-        <div className="container-new">
+        <div className="container-new" 
+          onKeyPress={(e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+              handleLancar(e)
+              changeFocusTo('input-minutos');
+            }
+          }}
+        >
           <div className="container-first-line">
             <input
               type="Number"
+              id="input-minutos"
               value={newLancamento.intervalo}
               placeholder="Minutos gastos na tarefa"
               onChange={(e) =>
@@ -267,10 +276,16 @@ function Dashboard() {
             />
             <textarea
               value={newLancamento.acao}
-              placeholder="Ação realizada"
+              placeholder="Digite a ação realizada e depois utilize 'Ctrl + Enter' para lançar"
               onChange={(e) =>
                 setNewLancamento({ ...newLancamento, acao: e.target.value })
               }
+              onKeyPress={(e) => {
+                if (e.ctrlKey && e.key === 'Enter') {
+                  handleLancar(e)
+                  changeFocusTo('input-minutos');
+                }
+              }}
             />
           </div>
           <NewBt color="black" onClick={(e) => handleLancar(e)}>
