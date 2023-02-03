@@ -27,6 +27,7 @@ export default function useFuncoes({
     setNewLancamento(Constantes.emptyLancamento);
     setEditing(false);
     setOsSelected(undefined);
+    changeFocusTo('input-minutos');
   }
 
   function valideOrToast() {
@@ -107,6 +108,12 @@ export default function useFuncoes({
   }
 
   function handleEdit(lancamentoEditing) {
+    if (lancamentoEditing.copied === true) {
+      toast.warn("Lançamento bloqueado, desbloqueie antes de editar");
+      return ;
+    }
+
+    changeFocusTo('input-minutos');
     setNewLancamento(lancamentoEditing);
     setEditing(true);
   }
