@@ -195,7 +195,7 @@ function Dashboard() {
                 onClick={() => handleEdit(lancamento)}
                 disabled={lancamento.copied}
               >
-                Edit
+                Edit (e)
               </button>
               <button type="button" onClick={() => handleCopy(lancamento)}>
                 {lancamento.textoBotaoAcao}
@@ -231,6 +231,13 @@ function Dashboard() {
                   intervalo: e.target.value,
                 })
               }
+              onKeyPress={(e) => {
+                if (e.key === 'e') {
+                  const lastLancamento = lancamentoList[lancamentoList.length - 1];
+                  handleEdit(lastLancamento);
+                  e.preventDefault();
+                }
+              }}
             />
             <Checkbox
               label="Tarefa evolutiva"
