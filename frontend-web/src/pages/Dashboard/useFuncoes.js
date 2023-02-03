@@ -6,6 +6,7 @@ import { createObjetoLancamentoFrom } from './utils';
 import Constantes from './Constantes';
 import { convertMinutesToObj, formatHoraLancamento } from '../../util';
 import exportDaily from '../../services/exportDaily';
+import { changeFocusTo } from '../../util/jsUtil';
 
 export default function useFuncoes({
   setNewLancamento,
@@ -234,10 +235,6 @@ export default function useFuncoes({
     setExportingJSON(true);
   }
 
-  function changeFocusTo(id) {
-    document.getElementById(id).focus();
-  }
-
   return {
     handleCancelar,
     handleLancar,
@@ -252,6 +249,5 @@ export default function useFuncoes({
     handleUpdateBH,
     handleExportJson,
     handleStartDay,
-    changeFocusTo,
   };
 }
