@@ -88,7 +88,6 @@ function Dashboard() {
     handleUpdateBH,
     handleExportJson,
     handleStartDay,
-    changeFocusTo,
   } = useFuncoes({
     setNewLancamento,
     setEditing,
@@ -217,7 +216,6 @@ function Dashboard() {
           onKeyPress={(e) => {
             if (e.ctrlKey && e.key === 'Enter') {
               handleLancar(e)
-              changeFocusTo('input-minutos');
             }
           }}
         >
