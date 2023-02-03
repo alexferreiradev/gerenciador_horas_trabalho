@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - 20xx-xx-xx
 ### Added
+- Editar mais rápido: adição de alteração de foco e atalho para editar ultimo lançamento
 ### Changed
 ### Removed
 ### Fixed
