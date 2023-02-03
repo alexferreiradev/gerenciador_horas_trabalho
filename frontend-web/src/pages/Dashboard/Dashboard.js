@@ -280,12 +280,6 @@ function Dashboard() {
               onChange={(e) =>
                 setNewLancamento({ ...newLancamento, acao: e.target.value })
               }
-              onKeyPress={(e) => {
-                if (e.ctrlKey && e.key === 'Enter') {
-                  handleLancar(e)
-                  changeFocusTo('input-minutos');
-                }
-              }}
             />
           </div>
           <NewBt color="black" onClick={(e) => handleLancar(e)}>
