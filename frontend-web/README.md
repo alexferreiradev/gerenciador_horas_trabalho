@@ -9,6 +9,9 @@ eslint + prettier:
 Diversas:
 `yarn add styled-components history axios react-icons prop-types react-router-dom`
 
+## Desenvolver usando TDD
+Criei seu teste e execute o comando: `yarn test` no terminal. Após alterar o teste e salvar, será re-executado automaticamente. 
+
 ## Execução em Dev
 `yarn start`
 
