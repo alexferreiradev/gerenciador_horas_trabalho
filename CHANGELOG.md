@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Editar mais rápido: adição de alteração de foco e atalho para editar ultimo lançamento
 ### Changed
+- Tempo de notificações: alterado para 8 segundos. Estava rápido demais.
 ### Removed
 ### Fixed
 
