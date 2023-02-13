@@ -6,6 +6,7 @@ import { createObjetoLancamentoFrom } from './utils';
 import Constantes from './Constantes';
 import { convertMinutesToObj, formatHoraLancamento } from '../../util';
 import exportDaily from '../../services/exportDaily';
+import { changeFocusTo } from '../../util/jsUtil';
 
 export default function useFuncoes({
   setNewLancamento,
@@ -26,6 +27,7 @@ export default function useFuncoes({
     setNewLancamento(Constantes.emptyLancamento);
     setEditing(false);
     setOsSelected(undefined);
+    changeFocusTo('input-minutos');
   }
 
   function valideOrToast() {
@@ -106,6 +108,12 @@ export default function useFuncoes({
   }
 
   function handleEdit(lancamentoEditing) {
+    if (lancamentoEditing.copied === true) {
+      toast.warn("Lançamento bloqueado, desbloqueie antes de editar");
+      return ;
+    }
+
+    changeFocusTo('input-minutos');
     setNewLancamento(lancamentoEditing);
     setEditing(true);
   }
@@ -234,10 +242,6 @@ export default function useFuncoes({
     setExportingJSON(true);
   }
 
-  function changeFocusTo(id) {
-    document.getElementById(id).focus();
-  }
-
   return {
     handleCancelar,
     handleLancar,
@@ -252,6 +256,5 @@ export default function useFuncoes({
     handleUpdateBH,
     handleExportJson,
     handleStartDay,
-    changeFocusTo,
   };
 }

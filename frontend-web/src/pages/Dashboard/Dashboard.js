@@ -88,7 +88,6 @@ function Dashboard() {
     handleUpdateBH,
     handleExportJson,
     handleStartDay,
-    changeFocusTo,
   } = useFuncoes({
     setNewLancamento,
     setEditing,
@@ -196,7 +195,7 @@ function Dashboard() {
                 onClick={() => handleEdit(lancamento)}
                 disabled={lancamento.copied}
               >
-                Edit
+                Edit (e)
               </button>
               <button type="button" onClick={() => handleCopy(lancamento)}>
                 {lancamento.textoBotaoAcao}
@@ -217,7 +216,6 @@ function Dashboard() {
           onKeyPress={(e) => {
             if (e.ctrlKey && e.key === 'Enter') {
               handleLancar(e)
-              changeFocusTo('input-minutos');
             }
           }}
         >
@@ -233,6 +231,13 @@ function Dashboard() {
                   intervalo: e.target.value,
                 })
               }
+              onKeyPress={(e) => {
+                if (e.key === 'e') {
+                  const lastLancamento = lancamentoList[lancamentoList.length - 1];
+                  handleEdit(lastLancamento);
+                  e.preventDefault();
+                }
+              }}
             />
             <Checkbox
               label="Tarefa evolutiva"
@@ -280,12 +285,6 @@ function Dashboard() {
               onChange={(e) =>
                 setNewLancamento({ ...newLancamento, acao: e.target.value })
               }
-              onKeyPress={(e) => {
-                if (e.ctrlKey && e.key === 'Enter') {
-                  handleLancar(e)
-                  changeFocusTo('input-minutos');
-                }
-              }}
             />
           </div>
           <NewBt color="black" onClick={(e) => handleLancar(e)}>
