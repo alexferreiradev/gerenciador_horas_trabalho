@@ -23,7 +23,7 @@ function App() {
         </Container>
       </MuiPickersUtilsProvider>
       <Global />
-      <ToastContainer autoClose={3000} />
+      <ToastContainer autoClose={8000} />
     </Router>
   );
 }
