@@ -25,6 +25,12 @@ export const Resumo = styled.div`
   ul {
     list-style: none;
   }
+  li span {
+    margin-right: 8px;
+    text-align: left;
+    padding: 6px 0 7px;
+    display: inline-flex;
+  }
 `;
 
 export const ListaLancamento = styled.div`
