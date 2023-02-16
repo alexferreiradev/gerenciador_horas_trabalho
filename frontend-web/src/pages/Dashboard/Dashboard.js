@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { KeyboardTimePicker } from '@material-ui/pickers';
+import { TimePicker } from '@material-ui/pickers';
 import { Button, Checkbox, Input, Modal } from 'semantic-ui-react';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 
@@ -111,10 +111,12 @@ function Dashboard() {
         <ul>
           <li>
             <span>Hora Inicio:</span>
-            <KeyboardTimePicker
+            <TimePicker
               value={horaInicio}
-              onChange={(dt) => setHoraInicio(dt)}
-              KeyboardButtonProps={{
+              onChange={(dt) => {
+                setHoraInicio(dt)
+              }}
+              PopoverProps={{
                 'aria-label': 'change time',
               }}
             />

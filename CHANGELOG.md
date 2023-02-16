@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tempo de notificações: alterado para 8 segundos. Estava rápido demais.
 ### Removed
 ### Fixed
+- Tempo de inicio: estava gerando erro ao editar.
 
 ## [0.6.0] - 2023-01-12
 ### Added
