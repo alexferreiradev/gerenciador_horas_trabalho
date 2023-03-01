@@ -72,6 +72,8 @@ function Dashboard() {
     totalMinutesBH,
     currentTime,
     exportingJSON,
+    newLancamento,
+    editing,
   });
 
   const {
@@ -262,8 +264,9 @@ function Dashboard() {
               }
             />
           </div>
+          <span>Última hora lançada: {horaFinalFormatted}</span>
           <div hidden={newLancamento.isIntervalo}>
-            <AsyncCreatableSelect
+          <AsyncCreatableSelect
               className="createOS"
               isClearable
               createOptionPosition="first"
