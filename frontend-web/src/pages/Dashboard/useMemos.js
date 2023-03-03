@@ -13,6 +13,8 @@ export default function useMemos({
   totalMinutesBH,
   currentTime,
   exportingJSON,
+  newLancamento,
+  editing,
 }) {
   const lancamentosFiltered = useMemo(() => {
     return filterLancamentosWithIntervalo(lancamentoList);
@@ -49,13 +51,24 @@ export default function useMemos({
   }, [lancamentoList, lancamentosFiltered]);
 
   const totalMinutosLancados = useMemo(() => {
+    var lancamentoListWithNewLancamento = [...lancamentoList];
+    if (newLancamento && newLancamento.intervalo > 0) {
+      if (editing) {
+        const lancamentoIndex = lancamentoList.findIndex((i) => i.id === newLancamento.id);
+        if (lancamentoIndex < 0) throw new Error('Lancamento invalido para calcular total lançado');
+
+        lancamentoListWithNewLancamento[lancamentoIndex] = newLancamento;
+      } else {
+        lancamentoListWithNewLancamento.push(newLancamento);
+      }
+    }
     return (
-      lancamentoList.reduce(
+      lancamentoListWithNewLancamento.reduce(
         (acc, current) => acc + Number.parseInt(current.intervalo, 10),
         0
       ) || 0
     );
-  }, [lancamentoList]);
+  }, [lancamentoList, newLancamento, editing]);
 
   const totalMinutosLancamentosSemIntervalo = useMemo(() => {
     return (
