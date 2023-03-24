@@ -16,6 +16,9 @@ import {
   NewBt,
 } from './styles';
 
+import Hint from '../../components/Hint';
+
+
 function Dashboard() {
   const [lancamentoList, setLancamentoList] = useState([]);
   const [newLancamento, setNewLancamento] = useState(
@@ -122,14 +125,17 @@ function Dashboard() {
                 'aria-label': 'change time',
               }}
             />
+            <Hint hint='horaInicio' />
           </li>
           <li>
             <span>Total Lançado:</span>
             {totalLancado}
+            <Hint hint='totalLancado' />
           </li>
           <li>
             <span>Última hora lançada:</span>
             {horaFinalFormatted}
+            <Hint hint='ultimaHora' />
           </li>
           <li>
             <span>Hora atual:</span>
@@ -148,7 +154,7 @@ function Dashboard() {
             {totalTempoEvolutiva}
           </li>
           <li>
-            <span>Total no Banco de Horas:</span>
+            <span>Total no Banco de Horas<Hint hint='bancoHoras' />:</span>
             {totalBH}
             <Button
               icon="edit"
@@ -160,6 +166,7 @@ function Dashboard() {
         </ul>
         <button type="button" onClick={() => handleUnblockEdit()}>
           Desbloquear ediçao para todos
+          <Hint hint='desbloquearTodos' />
         </button>
         <Button
           icon={exportState.icon}
@@ -170,8 +177,7 @@ function Dashboard() {
           secondary
           icon="sync alternate"
           onClick={() => handleStartDay(isConfirmStartDayShowing)}
-          content="Iniciar Dia"
-        />
+        >Iniciar Dia<Hint hint='iniciarDia' /></Button>
       </Resumo>
       <ListaLancamento>
         <h1>Lista de lancamentos</h1>
@@ -243,6 +249,7 @@ function Dashboard() {
                 }
               }}
             />
+            <Hint hint='minutosGastos' />
             <Checkbox
               label="Tarefa evolutiva"
               checked={newLancamento.tarefaEvolutiva}
@@ -254,7 +261,7 @@ function Dashboard() {
               }
             />
             <Checkbox
-              label="Intervalo ?"
+              label="Intervalo"
               checked={newLancamento.isIntervalo}
               onChange={(_) =>
                 setNewLancamento({
@@ -263,10 +270,11 @@ function Dashboard() {
                 })
               }
             />
+            <Hint hint='intervalo' />
           </div>
-          <span>Última hora lançada: {horaFinalFormatted}</span>
+          <span>Última hora lançada: {horaFinalFormatted}<Hint hint='ultimaHora' /></span>
           <div hidden={newLancamento.isIntervalo}>
-          <AsyncCreatableSelect
+            <AsyncCreatableSelect
               className="createOS"
               isClearable
               createOptionPosition="first"
@@ -291,6 +299,7 @@ function Dashboard() {
                 setNewLancamento({ ...newLancamento, acao: e.target.value })
               }
             />
+            <Hint hint='textoLancamento' />
           </div>
           <NewBt color="black" onClick={(e) => handleLancar(e)}>
             Lançar
