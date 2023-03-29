@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Editar mais rápido: adição de alteração de foco e atalho para editar ultimo lançamento
 - Lançamento com total lançado: adição de informação de total lançado ao alterar minutos
 - Informações sobre cada campo para novo lançamento: facilitar novos usuários a utilizar o sistema
+- Placeholder para tarefa: facilita novos usuários a utilizarem o sistema
+
 ### Changed
 - Tempo de notificações: alterado para 8 segundos. Estava rápido demais.
 ### Removed
