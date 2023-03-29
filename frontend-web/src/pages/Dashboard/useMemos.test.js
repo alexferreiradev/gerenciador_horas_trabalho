@@ -11,6 +11,13 @@ beforeEach(() => {
     });
 });
 
+const horaInicio = new Date(1677600000000); // 28-02-2023--13:00 GMT3
+const baseMemoOptions = {
+    lancamentoList: [],
+    horaInicio,
+    currentTime: new Date(),
+}
+
 test('return minutes formated when is not editing', () => {
     const newLancamento = {...Constantes.emptyLancamento, intervalo: 10};
     const lancamentoList = [newLancamento, newLancamento];
@@ -67,7 +74,7 @@ test('return minutes without newLancamento when intervalo is lower than zero', (
     expect(horaFinalFormatted).toBe("13:20");
 });
 
-test('throw error when is editing and index not found', () => { 
+test('throw error when is editing and index not found', () => {
     const lancamentoExample = {...Constantes.emptyLancamento, intervalo: 10, id: 1};
     const lancamentoList = [lancamentoExample, lancamentoExample];
     const newLancamento = {...Constantes.emptyLancamento, intervalo: 10, id: 100};
@@ -84,4 +91,25 @@ test('throw error when is editing and index not found', () => {
             editing: true,
         });
     }).toThrow('Lancamento invalido');
+});
+
+test('should return os selected when new lancamento has os selected', () => {
+    const osSelected = '123';
+    const newLancamento = {...Constantes.emptyLancamento, os: osSelected};
+
+    const { osSelected: osMemo  } = useMemos({
+        ...baseMemoOptions,
+        newLancamento,
+    });
+    expect(osMemo).toStrictEqual({value: osSelected, label: osSelected});
+});
+
+test('should return empty os when there is no os selected on new lancamento', () => { 
+    const newLancamento = {...Constantes.emptyLancamento};
+
+    const { osSelected: osMemo  } = useMemos({
+        ...baseMemoOptions,
+        newLancamento,
+    });
+    expect(osMemo).toBe(null);
 });

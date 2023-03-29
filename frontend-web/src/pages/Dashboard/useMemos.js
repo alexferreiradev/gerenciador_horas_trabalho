@@ -6,6 +6,7 @@ import {
   filterLancamentosWithIntervalo,
 } from './utils';
 import { convertMinutesToObj, formatHoraMinuto } from '../../util/index';
+import Constantes from './Constantes';
 
 export default function useMemos({
   lancamentoList,
@@ -148,6 +149,12 @@ export default function useMemos({
     };
   }, [exportingJSON]);
 
+  const osSelected = useMemo(() => {
+    if (newLancamento.os) {
+      return { label: newLancamento.os, value: newLancamento.os}
+    } else return Constantes.emptyLancamento.os;
+  }, [newLancamento]);
+
   return {
     totalTempoCorretiva,
     totalTempoEvolutiva,
@@ -159,5 +166,6 @@ export default function useMemos({
     totalBH,
     currentHour,
     exportState,
+    osSelected,
   };
 }
