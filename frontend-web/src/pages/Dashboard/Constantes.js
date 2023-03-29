@@ -1,5 +1,5 @@
 const emptyLancamento = {
-  os: undefined,
+  os: null,
   acao: '',
   intervalo: '',
   sistema: undefined,
