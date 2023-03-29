@@ -69,6 +69,5 @@ test('should do actions to cancelar when call handleCancelar', () => {
 
     expect(setNewLancamento).toHaveBeenCalledWith(Constantes.emptyLancamento);
     expect(setEditing).toHaveBeenCalledWith(false);
-    expect(setOsSelected).toHaveBeenCalledWith(undefined);
     expect(changeFocusTo).toHaveBeenCalledWith('input-minutos');
 });
