@@ -24,7 +24,6 @@ function Dashboard() {
   const [newLancamento, setNewLancamento] = useState(
     Constantes.emptyLancamento
   );
-  const [osSelected, setOsSelected] = useState({ value: '', label: '' });
   const [sistemaSelected, setSistemaSelected] = useState({
     value: '',
     label: '',
@@ -47,7 +46,6 @@ function Dashboard() {
     horaInicio,
     newLancamento,
     totalMinutesBH,
-    setOsSelected,
     setSistemaSelected,
     setLancamentoList,
     setHoraInicio,
@@ -69,6 +67,7 @@ function Dashboard() {
     totalBH,
     currentHour,
     exportState,
+    osSelected,
   } = useMemos({
     lancamentoList,
     horaInicio,
@@ -96,7 +95,6 @@ function Dashboard() {
   } = useFuncoes({
     setNewLancamento,
     setEditing,
-    setOsSelected,
     setLancamentoList,
     newLancamento,
     lancamentoList,
@@ -222,7 +220,7 @@ function Dashboard() {
             </div>
           </LancamentoItem>
         ))}
-        <div className="container-new" 
+        <div className="container-new"
           onKeyPress={(e) => {
             if (e.ctrlKey && e.key === 'Enter') {
               handleLancar(e)
@@ -278,7 +276,7 @@ function Dashboard() {
               className="createOS"
               isClearable
               createOptionPosition="first"
-              allowCreateWhileLoading
+              placeholder="Tarefa que trabalhou"
               value={osSelected}
               loadOptions={promiseOSSelect}
               onChange={(newV, action) => handleChangeOS(newV, action)}

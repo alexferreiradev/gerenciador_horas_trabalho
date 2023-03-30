@@ -11,7 +11,6 @@ import { changeFocusTo } from '../../util/jsUtil';
 export default function useFuncoes({
   setNewLancamento,
   setEditing,
-  setOsSelected,
   setLancamentoList,
   newLancamento,
   lancamentoList,
@@ -26,7 +25,6 @@ export default function useFuncoes({
   function handleCancelar() {
     setNewLancamento(Constantes.emptyLancamento);
     setEditing(false);
-    setOsSelected(undefined);
     changeFocusTo('input-minutos');
   }
 
@@ -208,7 +206,7 @@ export default function useFuncoes({
 
   function handleChangeOS(newV, _) {
     if (!newV) return;
-    const { value = '' } = newV;
+    const { value = null } = newV;
     setNewLancamento({ ...newLancamento, os: value });
   }
 
