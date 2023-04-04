@@ -15,13 +15,15 @@ const setLancamentoList = jest.fn();
 const setNewLancamento = jest.fn();
 const setEditing = jest.fn();
 const setOsSelected = jest.fn();
-const { handleStartDay, handleEdit, handleCancelar } = useFuncoes({
+const newLancamento = { ...Constantes.emptyLancamento };
+const { handleStartDay, handleEdit, handleCancelar, handleChangeOS } = useFuncoes({
     setConfirmStartDayShowing,
     setLancamentoList,
     setNewLancamento,
     setEditing,
     setOsSelected,
     lancamentoList: [],
+    newLancamento,
 });
 
 beforeEach(() => {
@@ -70,4 +72,35 @@ test('should do actions to cancelar when call handleCancelar', () => {
     expect(setNewLancamento).toHaveBeenCalledWith(Constantes.emptyLancamento);
     expect(setEditing).toHaveBeenCalledWith(false);
     expect(changeFocusTo).toHaveBeenCalledWith('input-minutos');
+});
+
+test('should set os equal null when option is null for changeOs', () => {
+    const option = null;
+
+    handleChangeOS(option);
+
+    expect(setNewLancamento).toHaveBeenCalledWith(expect.objectContaining({
+        os: null
+    }));
+});
+
+test('should set os null when option is not null and os is null for changeOs', () => {
+    const option = {label: null, value: null};
+
+    handleChangeOS(option);
+
+    expect(setNewLancamento).toHaveBeenCalledWith(expect.objectContaining({
+        os: null
+    }));
+});
+
+test('should set os when os in option is valid for changeOs', () => {
+    const validOs = 'test';
+    const option = {label: validOs, value: validOs};
+
+    handleChangeOS(option);
+
+    expect(setNewLancamento).toHaveBeenCalledWith(expect.objectContaining({
+        os: validOs
+    }));
 });

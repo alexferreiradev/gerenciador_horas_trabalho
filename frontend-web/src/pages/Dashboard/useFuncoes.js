@@ -205,8 +205,7 @@ export default function useFuncoes({
   }
 
   function handleChangeOS(newV, _) {
-    if (!newV) return;
-    const { value = null } = newV;
+    const { value = null } = newV || {};
     setNewLancamento({ ...newLancamento, os: value });
   }
 
