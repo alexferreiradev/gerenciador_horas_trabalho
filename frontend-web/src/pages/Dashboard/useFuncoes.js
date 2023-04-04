@@ -14,7 +14,6 @@ export default function useFuncoes({
   setLancamentoList,
   newLancamento,
   lancamentoList,
-  sistemaSelectList,
   editing,
   osSelectList,
   setIsAlterBHOpen,
@@ -165,7 +164,6 @@ export default function useFuncoes({
           minutesConverted: `${hora}h, ${minuto}m`,
           intervalo,
           tarefaEvolutiva: true,
-          sistema: '',
           os: 'Work',
         },
         undefined
@@ -194,25 +192,9 @@ export default function useFuncoes({
     });
   }
 
-  function promiseSistemaSelect(inputValue) {
-    return new Promise((resolve) => {
-      resolve(
-        sistemaSelectList.filter((i) =>
-          i.label.toLowerCase().includes(inputValue.toLowerCase())
-        )
-      );
-    });
-  }
-
   function handleChangeOS(newV, _) {
     const { value = null } = newV || {};
     setNewLancamento({ ...newLancamento, os: value });
-  }
-
-  function handleChangeSistema(newV, _) {
-    if (!newV) return;
-    const { value = '' } = newV;
-    setNewLancamento({ ...newLancamento, sistema: value });
   }
 
   function handleUnblockEdit() {
@@ -247,8 +229,6 @@ export default function useFuncoes({
     handleDelete,
     promiseOSSelect,
     handleChangeOS,
-    promiseSistemaSelect,
-    handleChangeSistema,
     handleUnblockEdit,
     handleUpdateBH,
     handleExportJson,

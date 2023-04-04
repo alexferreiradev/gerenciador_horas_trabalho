@@ -24,10 +24,6 @@ function Dashboard() {
   const [newLancamento, setNewLancamento] = useState(
     Constantes.emptyLancamento
   );
-  const [sistemaSelected, setSistemaSelected] = useState({
-    value: '',
-    label: '',
-  });
   const [editing, setEditing] = useState(false);
   const [horaInicio, setHoraInicio] = useState();
   const [isAlterBHOpen, setIsAlterBHOpen] = useState(false);
@@ -46,7 +42,6 @@ function Dashboard() {
     horaInicio,
     newLancamento,
     totalMinutesBH,
-    setSistemaSelected,
     setLancamentoList,
     setHoraInicio,
     setTotalMinutesBH,
@@ -63,7 +58,6 @@ function Dashboard() {
     horaFinalFormatted,
     totalOS,
     osSelectList,
-    sistemaSelectList,
     totalBH,
     currentHour,
     exportState,
@@ -86,8 +80,6 @@ function Dashboard() {
     handleDelete,
     promiseOSSelect,
     handleChangeOS,
-    promiseSistemaSelect,
-    handleChangeSistema,
     handleUnblockEdit,
     handleUpdateBH,
     handleExportJson,
@@ -98,7 +90,6 @@ function Dashboard() {
     setLancamentoList,
     newLancamento,
     lancamentoList,
-    sistemaSelectList,
     editing,
     osSelectList,
     setIsAlterBHOpen,
@@ -193,7 +184,6 @@ function Dashboard() {
               </span>
               <div hidden={lancamento.isIntervalo}>
                 <span>OS#{lancamento.os} - </span>
-                <span>{lancamento.sistema} - </span>
               </div>
               <span>{lancamento.acao}</span>
             </div>
@@ -280,15 +270,6 @@ function Dashboard() {
               value={osSelected}
               loadOptions={promiseOSSelect}
               onChange={(newV, action) => handleChangeOS(newV, action)}
-            />
-            <AsyncCreatableSelect
-              className="createOS"
-              isClearable
-              createOptionPosition="first"
-              allowCreateWhileLoading
-              value={sistemaSelected}
-              loadOptions={promiseSistemaSelect}
-              onChange={(newV, action) => handleChangeSistema(newV, action)}
             />
             <textarea
               value={newLancamento.acao}

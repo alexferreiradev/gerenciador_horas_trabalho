@@ -101,25 +101,12 @@ export default function useMemos({
     return osSet || [];
   }, [lancamentosFiltered]);
 
-  const sistemaList = useMemo(() => {
-    const lista = lancamentoList.map((i) => i.sistema) || [];
-    const sistemaSet = new Set(lista);
-    return sistemaSet || [];
-  }, [lancamentoList]);
-
   const osSelectList = useMemo(() => {
     if (!osList) return [];
     return (
       [...osList].map((i) => ({ value: i, label: i, isFixed: true })) || []
     );
   }, [osList]);
-
-  const sistemaSelectList = useMemo(() => {
-    if (!sistemaList) return [];
-    return (
-      [...sistemaList].map((i) => ({ value: i, label: i, isFixed: true })) || []
-    );
-  }, [sistemaList]);
 
   const totalOS = useMemo(() => {
     if (osList) {
@@ -162,7 +149,6 @@ export default function useMemos({
     horaFinalFormatted,
     totalOS,
     osSelectList,
-    sistemaSelectList,
     totalBH,
     currentHour,
     exportState,
