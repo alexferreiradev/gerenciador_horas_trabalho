@@ -15,7 +15,7 @@ module.exports = {
     SharedArrayBuffer: 'readonly',
     __DEV__: true,
   },
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -23,7 +23,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['react', 'jsx-a11y', 'import', 'react-hooks', 'prettier'],
+  plugins: ['@babel', 'react', 'jsx-a11y', 'import', 'react-hooks', 'prettier'],
   rules: {
     // Somente para inicio de dev, uma POC, nao commit descomentado
     // 'no-unused-vars': 0,
