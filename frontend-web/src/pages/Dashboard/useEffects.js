@@ -8,9 +8,7 @@ import exportJSON from '../../services/exportJson';
 export default function useEffects({
   lancamentoList,
   horaInicio,
-  newLancamento,
   totalMinutesBH,
-  setSistemaSelected,
   setLancamentoList,
   setHoraInicio,
   setTotalMinutesBH,
@@ -87,7 +85,6 @@ export default function useEffects({
               minutesConverted: `${hora}h, ${minuto}m`,
               intervalo,
               tarefaEvolutiva: true,
-              sistema: '',
               os: 'Work',
             },
             undefined
