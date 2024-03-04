@@ -1,0 +1,16 @@
+on: 
+  push
+
+jobs:
+  build:
+    name: Build react
+    runs-on: ubuntu-16.04
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: DerYeger/yarn-setup-action@v2.0.21
+      with:
+        node-version: 16
+    - name: Build
+      run: |
+        yarn build
