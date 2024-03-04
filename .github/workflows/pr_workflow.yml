@@ -4,7 +4,7 @@ on:
 jobs:
   build:
     name: Build react
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v1
@@ -13,4 +13,5 @@ jobs:
         node-version: 16
     - name: Build
       run: |
+        yarn
         yarn build
