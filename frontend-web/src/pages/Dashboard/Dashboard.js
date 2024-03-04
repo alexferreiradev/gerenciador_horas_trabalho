@@ -296,6 +296,11 @@ function Dashboard() {
             type="number"
             value={totalMinutosBHInput}
             onChange={(e) => setTotalMinutosBHInput(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.ctrlKey && e.key === 'Enter') {
+                handleUpdateBH(totalMinutosBHInput)
+              }
+            }}
           />
         </Modal.Content>
         <Modal.Actions>
