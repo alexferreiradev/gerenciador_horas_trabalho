@@ -21,6 +21,4 @@ jobs:
       run: yarn install --immutable ${{ inputs.flags }}
       shell: bash
     - name: Build
-      run: |
-        yarn
-        yarn build
+      run: yarn build
