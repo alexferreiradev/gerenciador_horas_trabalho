@@ -1,0 +1,26 @@
+name: Workflow for Pushes
+
+on: 
+  push:
+    branches-ignore:
+      - 'main'
+
+jobs:
+  build:
+    name: Build react
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 14
+    - name: Install dependencies
+      run: |
+        cd frontend-web
+        yarn install --immutable ${{ inputs.flags }}
+      shell: bash
+    - name: Build
+      run: |
+        cd frontend-web
+        yarn build
