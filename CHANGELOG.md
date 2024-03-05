@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 20xx-xx-xx
+## [0.6.0] - 2023-01-23
 ### Added
 - Editar mais rápido: adição de alteração de foco e atalho para editar ultimo lançamento
 - Lançamento com total lançado: adição de informação de total lançado ao alterar minutos
@@ -12,7 +12,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Placeholder para tarefa: facilita novos usuários a utilizarem o sistema
 - Imagem de logotipo
 - Atalho para lançamento de minutos no banco de horas.
-
 ### Changed
 - Tempo de notificações: alterado para 8 segundos. Estava rápido demais.
 ### Removed
@@ -21,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tempo de inicio: estava gerando erro ao editar.
 - Tarefa em novo lançamento: não tinha como limpar a tarefa selecionada. Agora será possível clicar no x e remover a tarefa selecionada.  
 
-## [0.6.0] - 2023-01-12
+## [0.5.1] - 2022-02-08
 ### Added
 - Função daily: gerar um texto para mapa mental com todos os lançamentos feitos e descrições copiado para área de transferencia
 - Atalho para lançamento: atalho de teclado para agilizar os lançamentos
@@ -101,7 +100,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Botão para reverter bloqueio de edição
 
 
-[Unreleased]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/compare/v0.2.0...HEAD
+[0.6.0]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/compare/v0.5.1...v0.6.0
+[0.5.1]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/compare/v0.3.0...v0.4.0
 [0.2.0]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/compare/v0.1.0...v0.2.0
