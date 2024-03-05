@@ -14,9 +14,12 @@ jobs:
     - uses: actions/checkout@v1
       with:
         path: 'frontend-web'
-    - uses: mskelton/setup-yarn@v2.0.0
+    - uses: actions/setup-node@v4
       with:
-        node-version: 16
+        node-version: 14
+    - name: Install dependencies
+      run: yarn install --immutable ${{ inputs.flags }}
+      shell: bash
     - name: Build
       run: |
         yarn
