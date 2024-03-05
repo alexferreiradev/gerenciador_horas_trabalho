@@ -12,11 +12,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+      with:
+        path: 'frontend-web'
     - uses: mskelton/setup-yarn@v2.0.0
       with:
         node-version: 16
     - name: Build
       run: |
-        cd frontend-web
         yarn
         yarn build
