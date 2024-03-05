@@ -17,6 +17,8 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: 14
+    - name: Change to frontend dir
+      run: cd frontend-web
     - name: Install dependencies
       run: yarn install --immutable ${{ inputs.flags }}
       shell: bash
