@@ -6,15 +6,14 @@ import { createObjetoLancamentoFrom } from './utils';
 import Constantes from './Constantes';
 import { convertMinutesToObj, formatHoraLancamento } from '../../util';
 import exportDaily from '../../services/exportDaily';
+import { changeFocusTo } from '../../util/jsUtil';
 
 export default function useFuncoes({
   setNewLancamento,
   setEditing,
-  setOsSelected,
   setLancamentoList,
   newLancamento,
   lancamentoList,
-  sistemaSelectList,
   editing,
   osSelectList,
   setIsAlterBHOpen,
@@ -25,7 +24,7 @@ export default function useFuncoes({
   function handleCancelar() {
     setNewLancamento(Constantes.emptyLancamento);
     setEditing(false);
-    setOsSelected(undefined);
+    changeFocusTo('input-minutos');
   }
 
   function valideOrToast() {
@@ -106,6 +105,12 @@ export default function useFuncoes({
   }
 
   function handleEdit(lancamentoEditing) {
+    if (lancamentoEditing.copied === true) {
+      toast.warn("Lançamento bloqueado, desbloqueie antes de editar");
+      return ;
+    }
+
+    changeFocusTo('input-minutos');
     setNewLancamento(lancamentoEditing);
     setEditing(true);
   }
@@ -159,7 +164,6 @@ export default function useFuncoes({
           minutesConverted: `${hora}h, ${minuto}m`,
           intervalo,
           tarefaEvolutiva: true,
-          sistema: '',
           os: 'Work',
         },
         undefined
@@ -188,26 +192,9 @@ export default function useFuncoes({
     });
   }
 
-  function promiseSistemaSelect(inputValue) {
-    return new Promise((resolve) => {
-      resolve(
-        sistemaSelectList.filter((i) =>
-          i.label.toLowerCase().includes(inputValue.toLowerCase())
-        )
-      );
-    });
-  }
-
   function handleChangeOS(newV, _) {
-    if (!newV) return;
-    const { value = '' } = newV;
+    const { value = null } = newV || {};
     setNewLancamento({ ...newLancamento, os: value });
-  }
-
-  function handleChangeSistema(newV, _) {
-    if (!newV) return;
-    const { value = '' } = newV;
-    setNewLancamento({ ...newLancamento, sistema: value });
   }
 
   function handleUnblockEdit() {
@@ -234,10 +221,6 @@ export default function useFuncoes({
     setExportingJSON(true);
   }
 
-  function changeFocusTo(id) {
-    document.getElementById(id).focus();
-  }
-
   return {
     handleCancelar,
     handleLancar,
@@ -246,12 +229,9 @@ export default function useFuncoes({
     handleDelete,
     promiseOSSelect,
     handleChangeOS,
-    promiseSistemaSelect,
-    handleChangeSistema,
     handleUnblockEdit,
     handleUpdateBH,
     handleExportJson,
     handleStartDay,
-    changeFocusTo,
   };
 }

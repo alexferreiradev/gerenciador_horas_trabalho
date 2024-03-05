@@ -6,14 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.6.0] - 2023-01-23
 ### Added
-- Função daily: gerar um texto para mapa mental co todos os lançamentos feitos e descrições copiado para área de transferencia
-- Atalho para lançamento: atalho de teclado para agilizar os lançamentos
+- Editar mais rápido: adição de alteração de foco e atalho para editar ultimo lançamento
+- Lançamento com total lançado: adição de informação de total lançado ao alterar minutos
+- Informações sobre cada campo para novo lançamento: facilitar novos usuários a utilizar o sistema
+- Placeholder para tarefa: facilita novos usuários a utilizarem o sistema
+- Imagem de logotipo
+- Atalho para lançamento de minutos no banco de horas.
 ### Changed
+- Tempo de notificações: alterado para 8 segundos. Estava rápido demais.
 ### Removed
+- Campo sistema de lançamento: remoção de campo que não estava sendo utilizado. Ele é um campo raramente utilizado. Versões futuras vamos colocar em campos opcionais. 
 ### Fixed
+- Tempo de inicio: estava gerando erro ao editar.
+- Tarefa em novo lançamento: não tinha como limpar a tarefa selecionada. Agora será possível clicar no x e remover a tarefa selecionada.  
 
 ## [0.5.1] - 2022-02-08
 ### Added
+- Função daily: gerar um texto para mapa mental com todos os lançamentos feitos e descrições copiado para área de transferencia
+- Atalho para lançamento: atalho de teclado para agilizar os lançamentos
 ### Changed
 ### Removed
 ### Fixed

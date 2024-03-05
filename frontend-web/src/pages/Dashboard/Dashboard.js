@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { KeyboardTimePicker } from '@material-ui/pickers';
+import { TimePicker } from '@material-ui/pickers';
 import { Button, Checkbox, Input, Modal } from 'semantic-ui-react';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 
@@ -16,16 +16,14 @@ import {
   NewBt,
 } from './styles';
 
+import Hint from '../../components/Hint';
+
+
 function Dashboard() {
   const [lancamentoList, setLancamentoList] = useState([]);
   const [newLancamento, setNewLancamento] = useState(
     Constantes.emptyLancamento
   );
-  const [osSelected, setOsSelected] = useState({ value: '', label: '' });
-  const [sistemaSelected, setSistemaSelected] = useState({
-    value: '',
-    label: '',
-  });
   const [editing, setEditing] = useState(false);
   const [horaInicio, setHoraInicio] = useState();
   const [isAlterBHOpen, setIsAlterBHOpen] = useState(false);
@@ -44,8 +42,6 @@ function Dashboard() {
     horaInicio,
     newLancamento,
     totalMinutesBH,
-    setOsSelected,
-    setSistemaSelected,
     setLancamentoList,
     setHoraInicio,
     setTotalMinutesBH,
@@ -62,16 +58,18 @@ function Dashboard() {
     horaFinalFormatted,
     totalOS,
     osSelectList,
-    sistemaSelectList,
     totalBH,
     currentHour,
     exportState,
+    osSelected,
   } = useMemos({
     lancamentoList,
     horaInicio,
     totalMinutesBH,
     currentTime,
     exportingJSON,
+    newLancamento,
+    editing,
   });
 
   const {
@@ -82,21 +80,16 @@ function Dashboard() {
     handleDelete,
     promiseOSSelect,
     handleChangeOS,
-    promiseSistemaSelect,
-    handleChangeSistema,
     handleUnblockEdit,
     handleUpdateBH,
     handleExportJson,
     handleStartDay,
-    changeFocusTo,
   } = useFuncoes({
     setNewLancamento,
     setEditing,
-    setOsSelected,
     setLancamentoList,
     newLancamento,
     lancamentoList,
-    sistemaSelectList,
     editing,
     osSelectList,
     setIsAlterBHOpen,
@@ -112,21 +105,26 @@ function Dashboard() {
         <ul>
           <li>
             <span>Hora Inicio:</span>
-            <KeyboardTimePicker
+            <TimePicker
               value={horaInicio}
-              onChange={(dt) => setHoraInicio(dt)}
-              KeyboardButtonProps={{
+              onChange={(dt) => {
+                setHoraInicio(dt)
+              }}
+              PopoverProps={{
                 'aria-label': 'change time',
               }}
             />
+            <Hint hint='horaInicio' />
           </li>
           <li>
             <span>Total Lançado:</span>
             {totalLancado}
+            <Hint hint='totalLancado' />
           </li>
           <li>
             <span>Última hora lançada:</span>
             {horaFinalFormatted}
+            <Hint hint='ultimaHora' />
           </li>
           <li>
             <span>Hora atual:</span>
@@ -145,7 +143,7 @@ function Dashboard() {
             {totalTempoEvolutiva}
           </li>
           <li>
-            <span>Total no Banco de Horas:</span>
+            <span>Total no Banco de Horas<Hint hint='bancoHoras' />:</span>
             {totalBH}
             <Button
               icon="edit"
@@ -157,6 +155,7 @@ function Dashboard() {
         </ul>
         <button type="button" onClick={() => handleUnblockEdit()}>
           Desbloquear ediçao para todos
+          <Hint hint='desbloquearTodos' />
         </button>
         <Button
           icon={exportState.icon}
@@ -167,8 +166,7 @@ function Dashboard() {
           secondary
           icon="sync alternate"
           onClick={() => handleStartDay(isConfirmStartDayShowing)}
-          content="Iniciar Dia"
-        />
+        >Iniciar Dia<Hint hint='iniciarDia' /></Button>
       </Resumo>
       <ListaLancamento>
         <h1>Lista de lancamentos</h1>
@@ -186,7 +184,6 @@ function Dashboard() {
               </span>
               <div hidden={lancamento.isIntervalo}>
                 <span>OS#{lancamento.os} - </span>
-                <span>{lancamento.sistema} - </span>
               </div>
               <span>{lancamento.acao}</span>
             </div>
@@ -196,7 +193,7 @@ function Dashboard() {
                 onClick={() => handleEdit(lancamento)}
                 disabled={lancamento.copied}
               >
-                Edit
+                Edit (e)
               </button>
               <button type="button" onClick={() => handleCopy(lancamento)}>
                 {lancamento.textoBotaoAcao}
@@ -213,11 +210,10 @@ function Dashboard() {
             </div>
           </LancamentoItem>
         ))}
-        <div className="container-new" 
+        <div className="container-new"
           onKeyPress={(e) => {
             if (e.ctrlKey && e.key === 'Enter') {
               handleLancar(e)
-              changeFocusTo('input-minutos');
             }
           }}
         >
@@ -233,7 +229,15 @@ function Dashboard() {
                   intervalo: e.target.value,
                 })
               }
+              onKeyPress={(e) => {
+                if (e.key === 'e') {
+                  const lastLancamento = lancamentoList[lancamentoList.length - 1];
+                  handleEdit(lastLancamento);
+                  e.preventDefault();
+                }
+              }}
             />
+            <Hint hint='minutosGastos' />
             <Checkbox
               label="Tarefa evolutiva"
               checked={newLancamento.tarefaEvolutiva}
@@ -245,7 +249,7 @@ function Dashboard() {
               }
             />
             <Checkbox
-              label="Intervalo ?"
+              label="Intervalo"
               checked={newLancamento.isIntervalo}
               onChange={(_) =>
                 setNewLancamento({
@@ -254,25 +258,18 @@ function Dashboard() {
                 })
               }
             />
+            <Hint hint='intervalo' />
           </div>
+          <span>Última hora lançada: {horaFinalFormatted}<Hint hint='ultimaHora' /></span>
           <div hidden={newLancamento.isIntervalo}>
             <AsyncCreatableSelect
               className="createOS"
               isClearable
               createOptionPosition="first"
-              allowCreateWhileLoading
+              placeholder="Tarefa que trabalhou"
               value={osSelected}
               loadOptions={promiseOSSelect}
               onChange={(newV, action) => handleChangeOS(newV, action)}
-            />
-            <AsyncCreatableSelect
-              className="createOS"
-              isClearable
-              createOptionPosition="first"
-              allowCreateWhileLoading
-              value={sistemaSelected}
-              loadOptions={promiseSistemaSelect}
-              onChange={(newV, action) => handleChangeSistema(newV, action)}
             />
             <textarea
               value={newLancamento.acao}
@@ -280,13 +277,8 @@ function Dashboard() {
               onChange={(e) =>
                 setNewLancamento({ ...newLancamento, acao: e.target.value })
               }
-              onKeyPress={(e) => {
-                if (e.ctrlKey && e.key === 'Enter') {
-                  handleLancar(e)
-                  changeFocusTo('input-minutos');
-                }
-              }}
             />
+            <Hint hint='textoLancamento' />
           </div>
           <NewBt color="black" onClick={(e) => handleLancar(e)}>
             Lançar
@@ -304,6 +296,11 @@ function Dashboard() {
             type="number"
             value={totalMinutosBHInput}
             onChange={(e) => setTotalMinutosBHInput(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.ctrlKey && e.key === 'Enter') {
+                handleUpdateBH(totalMinutosBHInput)
+              }
+            }}
           />
         </Modal.Content>
         <Modal.Actions>

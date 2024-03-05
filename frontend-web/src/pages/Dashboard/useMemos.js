@@ -6,6 +6,7 @@ import {
   filterLancamentosWithIntervalo,
 } from './utils';
 import { convertMinutesToObj, formatHoraMinuto } from '../../util/index';
+import Constantes from './Constantes';
 
 export default function useMemos({
   lancamentoList,
@@ -13,6 +14,8 @@ export default function useMemos({
   totalMinutesBH,
   currentTime,
   exportingJSON,
+  newLancamento,
+  editing,
 }) {
   const lancamentosFiltered = useMemo(() => {
     return filterLancamentosWithIntervalo(lancamentoList);
@@ -49,13 +52,24 @@ export default function useMemos({
   }, [lancamentoList, lancamentosFiltered]);
 
   const totalMinutosLancados = useMemo(() => {
+    var lancamentoListWithNewLancamento = [...lancamentoList];
+    if (newLancamento && newLancamento.intervalo > 0) {
+      if (editing) {
+        const lancamentoIndex = lancamentoList.findIndex((i) => i.id === newLancamento.id);
+        if (lancamentoIndex < 0) throw new Error('Lancamento invalido para calcular total lançado');
+
+        lancamentoListWithNewLancamento[lancamentoIndex] = newLancamento;
+      } else {
+        lancamentoListWithNewLancamento.push(newLancamento);
+      }
+    }
     return (
-      lancamentoList.reduce(
+      lancamentoListWithNewLancamento.reduce(
         (acc, current) => acc + Number.parseInt(current.intervalo, 10),
         0
       ) || 0
     );
-  }, [lancamentoList]);
+  }, [lancamentoList, newLancamento, editing]);
 
   const totalMinutosLancamentosSemIntervalo = useMemo(() => {
     return (
@@ -87,25 +101,12 @@ export default function useMemos({
     return osSet || [];
   }, [lancamentosFiltered]);
 
-  const sistemaList = useMemo(() => {
-    const lista = lancamentoList.map((i) => i.sistema) || [];
-    const sistemaSet = new Set(lista);
-    return sistemaSet || [];
-  }, [lancamentoList]);
-
   const osSelectList = useMemo(() => {
     if (!osList) return [];
     return (
       [...osList].map((i) => ({ value: i, label: i, isFixed: true })) || []
     );
   }, [osList]);
-
-  const sistemaSelectList = useMemo(() => {
-    if (!sistemaList) return [];
-    return (
-      [...sistemaList].map((i) => ({ value: i, label: i, isFixed: true })) || []
-    );
-  }, [sistemaList]);
 
   const totalOS = useMemo(() => {
     if (osList) {
@@ -135,6 +136,12 @@ export default function useMemos({
     };
   }, [exportingJSON]);
 
+  const osSelected = useMemo(() => {
+    if (newLancamento.os) {
+      return { label: newLancamento.os, value: newLancamento.os}
+    } else return Constantes.emptyLancamento.os;
+  }, [newLancamento]);
+
   return {
     totalTempoCorretiva,
     totalTempoEvolutiva,
@@ -142,9 +149,9 @@ export default function useMemos({
     horaFinalFormatted,
     totalOS,
     osSelectList,
-    sistemaSelectList,
     totalBH,
     currentHour,
     exportState,
+    osSelected,
   };
 }

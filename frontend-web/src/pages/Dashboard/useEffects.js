@@ -8,10 +8,7 @@ import exportJSON from '../../services/exportJson';
 export default function useEffects({
   lancamentoList,
   horaInicio,
-  newLancamento,
   totalMinutesBH,
-  setOsSelected,
-  setSistemaSelected,
   setLancamentoList,
   setHoraInicio,
   setTotalMinutesBH,
@@ -51,14 +48,6 @@ export default function useEffects({
   }, [totalMinutesBH]);
 
   useEffect(() => {
-    setOsSelected({ value: newLancamento.os, label: newLancamento.os });
-    setSistemaSelected({
-      value: newLancamento.sistema,
-      label: newLancamento.sistema,
-    });
-  }, [newLancamento, setSistemaSelected, setOsSelected]);
-
-  useEffect(() => {
     setTotalMinutosBHInput(totalMinutesBH);
   }, [totalMinutesBH, setTotalMinutosBHInput]);
 
@@ -96,7 +85,6 @@ export default function useEffects({
               minutesConverted: `${hora}h, ${minuto}m`,
               intervalo,
               tarefaEvolutiva: true,
-              sistema: '',
               os: 'Work',
             },
             undefined
