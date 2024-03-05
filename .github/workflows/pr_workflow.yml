@@ -12,15 +12,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-      with:
-        path: 'frontend-web'
     - uses: actions/setup-node@v4
       with:
         node-version: 14
-    - name: Change to frontend dir
-      run: cd frontend-web
     - name: Install dependencies
-      run: yarn install --immutable ${{ inputs.flags }}
+      run: |
+        cd frontend-web
+        yarn install --immutable ${{ inputs.flags }}
       shell: bash
     - name: Build
-      run: yarn build
+      run: |
+        cd frontend-web
+        yarn build
