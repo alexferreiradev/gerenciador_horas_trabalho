@@ -35,7 +35,7 @@ jobs:
         yarn build
     - uses: actions/upload-artifact@v4.3.1
       with:
-        name: 'build'
+        name: 'build-${{matrix.node-version}}'
         path: frontend-web/build
   release:
     # The type of runner that the job will run on
@@ -47,7 +47,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/download-artifact@v4.1.4
         with: 
-          name: 'build'
+          name: 'build-${{matrix.node-version}}'
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.1
