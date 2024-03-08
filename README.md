@@ -1,3 +1,5 @@
+[![CD - Deploy](https://github.com/alexferreiradev/gerenciador_horas_trabalho/actions/workflows/deploy-workflow.yml/badge.svg)](https://github.com/alexferreiradev/gerenciador_horas_trabalho/actions/workflows/deploy-workflow.yml)
+
 # HORAS DE TALENTO
 Projeto para ajudar no lançamento de horas trabalhadas por talentos.
 
