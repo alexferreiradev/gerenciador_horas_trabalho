@@ -15,11 +15,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy: 
+      matrix:
+        node-version: [12, 14, 16]
+        
     steps:
     - uses: actions/checkout@v1
     - uses: actions/setup-node@v4
       with:
-        node-version: 14
+        node-version: ${{node-version}}
     - name: Install dependencies
       run: |
         cd frontend-web
