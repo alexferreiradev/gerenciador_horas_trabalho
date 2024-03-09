@@ -16,11 +16,26 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: 14
-    - name: Install dependencies
+        
+    - name: Cache node modules
+      id: cache-npm
+      uses: actions/cache@v3
+      env:
+        cache-name: cache-node-modules
+      with:
+        # npm cache files are stored in `~/.npm` on Linux/macOS
+        path: frontend-web/node_modules
+        key: ${{ runner.os }}-node-${{ matrix.node-version }}-build-${{ env.cache-name }}-${{ hashFiles('frontend-web/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-${{ matrix.node-version }}-build-${{ env.cache-name }}-
+    
+    - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+      name: Install dependencies
       run: |
         cd frontend-web
         yarn install --immutable ${{ inputs.flags }}
       shell: bash
+      
     - name: Build
       run: |
         cd frontend-web
