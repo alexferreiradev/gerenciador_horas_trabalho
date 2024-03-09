@@ -21,7 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tarefa em novo lançamento: não tinha como limpar a tarefa selecionada. Agora será possível clicar no x e remover a tarefa selecionada.  
 
 <details>
-  <sammary>Versões anteriores</sammary>
+  <summary>Versões anteriores</summary>
+  
 ## [0.5.1] - 2022-02-08
 ### Added
 - Função daily: gerar um texto para mapa mental com todos os lançamentos feitos e descrições copiado para área de transferencia
