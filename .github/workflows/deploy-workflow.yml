@@ -91,7 +91,7 @@ jobs:
           tag: ${{ needs.create-tag.outputs.tag }}
           name: Release ${{ needs.create-tag.outputs.tag }}
           bodyFile: CHANGELOG.md
-          artifacts: build-${{matrix.node-version}}.zip
+          artifacts: build-node-${{matrix.node-version}}.zip
           replacesArtifacts: false
           draft: true
           allowUpdates: true
