@@ -67,7 +67,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ jobs.create-tag.tag_version.outputs.new_tag }}
+          name: Release ${{ needs.create-tag.steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
           artifacts: build-${{matrix.node-version}}
           replacesArtifacts: false
