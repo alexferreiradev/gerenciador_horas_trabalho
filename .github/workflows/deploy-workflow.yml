@@ -36,7 +36,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-${{ matrix.node-version }}-build-${{ env.cache-name }}-
     
-    - if: ${{ steps..cache-npm.outputs.cache-hit != 'true' }}
+    - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
       name: Install dependencies
       run: |
         cd frontend-web
