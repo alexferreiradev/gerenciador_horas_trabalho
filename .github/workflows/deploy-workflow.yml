@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy: 
       matrix:
-        node-version: [12, 14, 16]
+        node-version: [12, 14]
         
     steps:
     - uses: actions/checkout@v1
@@ -57,7 +57,7 @@ jobs:
       - create-tag
     strategy: 
       matrix:
-        node-version: [12, 14, 16]
+        node-version: [12, 14]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -70,8 +70,8 @@ jobs:
         with:
           tag: ${{ needs.create-tag.outputs.tag }}
           name: Release ${{ needs.create-tag.outputs.tag }}
-          body: ${{ needs.create-tag.outputs.changelog }}
-          artifacts: build-${{matrix.node-version}}
+          bodyFile: CHANGELOG.md
+          artifacts: build-${{matrix.node-version}}.zip
           replacesArtifacts: false
           draft: true
           allowUpdates: true
