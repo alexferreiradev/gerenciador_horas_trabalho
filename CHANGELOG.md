@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tempo de inicio: estava gerando erro ao editar.
 - Tarefa em novo lançamento: não tinha como limpar a tarefa selecionada. Agora será possível clicar no x e remover a tarefa selecionada.  
 
+<details>
+  <sammary>Versões anteriores</sammary>
 ## [0.5.1] - 2022-02-08
 ### Added
 - Função daily: gerar um texto para mapa mental com todos os lançamentos feitos e descrições copiado para área de transferencia
@@ -99,6 +101,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bloqueio de edição de lançamento quando realiza a cópia de ação
 - Botão para reverter bloqueio de edição
 
+</details>
 
 [0.6.0]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/alexferreiradev/gerenciador_horas_trabalho/compare/v0.5.0...v0.5.1
