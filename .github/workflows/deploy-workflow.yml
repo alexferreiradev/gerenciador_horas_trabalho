@@ -64,7 +64,7 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          custom_release_rules: release:major,feat:minor,fix:path
+          custom_release_rules: release:major,feat:minor,fix:patch
     
   release:
     runs-on: ubuntu-latest
