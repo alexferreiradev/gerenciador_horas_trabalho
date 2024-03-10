@@ -1,7 +1,7 @@
 {
   "name": "horas-talento",
   "app-name": "Horas de Talento",
-  "version": "1.0.1",
+  "version": "1.0.1-snap",
   "private": true,
   "homepage": ".",
   "dependencies": {
