@@ -43,6 +43,7 @@ jobs:
       - run: ./script-test.sh $GITHUB_ACTOR >> $GIHUB_OUTPUT
         id: script
   results:
+    runs-on: ubuntu-latest
     needs:
       - scripts
     steps:
