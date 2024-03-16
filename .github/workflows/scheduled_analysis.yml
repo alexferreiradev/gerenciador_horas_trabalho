@@ -17,4 +17,6 @@ jobs:
 #        with:
 #          languages: 'javascript'
       - run: |
-          echo test secreto: ${{ secrets.TEST_SECRET }} 
+          echo test secreto: ${{ secrets.TEST_SECRET }}
+      - if: ${{ secrets.test_secret == 'valor secreto' }}
+        run: echo '::info::secrete ok'
