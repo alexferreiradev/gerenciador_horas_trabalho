@@ -24,5 +24,5 @@ jobs:
         run: |
           echo '::notice::secrete ok'
           echo '::warning::secrete ' ${{ env.env_secret }}
-      - if: ${{ !success() }}
+      - if: ${{ failure() }}
         run: echo '::error::secrete not valid'
