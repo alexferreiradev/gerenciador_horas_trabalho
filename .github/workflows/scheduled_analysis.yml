@@ -21,9 +21,10 @@ jobs:
       - run: |
           echo test secreto: ${{ secrets.TEST_SECRET }}
       - if: ${{ env.env_secret == 'valor errado' }}
+        id: validate
         run: |
           echo '::notice::secrete ok'
           echo '::warning::secrete ' ${{ env.env_secret }}
-      - if: ${{ cancelled() }}
+      - if: ${{ skipped() }}
         run: echo '::error::secrete not valid'
-      - run: echo ${{ steps[2].conclusion }}
+      - run: echo ${{ steps.validate.conclusion }}
