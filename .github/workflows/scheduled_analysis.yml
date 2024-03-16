@@ -28,3 +28,13 @@ jobs:
       - if: ${{ steps.validate.conclusion == 'skipped' }}
         run: echo '::error::secrete not valid'
       - run: echo ${{ steps.validate.conclusion }}
+  scripts:
+    name: 'Run script from repo'
+    runs-on: ubuntu-latest
+    default:
+      work-directory: ./scripts
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scritp-test.sh ${{ vars.GITHUB_ACTOR }}
+
