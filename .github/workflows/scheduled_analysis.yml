@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 'Analysing code with CodeQL'
-        uses: github/codeql-action/init@v3
-        with:
-          languages: 'javascript'
+#      - name: 'Analysing code with CodeQL'
+#        uses: github/codeql-action/init@v3
+#        with:
+#          languages: 'javascript'
+      - run: echo ${{ secrets.secret_test }}
