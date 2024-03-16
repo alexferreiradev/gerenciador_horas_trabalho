@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: chmod +x script-test.sh
       - run: ./script-test.sh ${{ github.actor }}
-      - run: echo "chave2=$(./script-test.sh $GITHUB_ACTOR)" >> "$GIHUB_OUTPUT"
+      - run: echo "chave2=$(sh script-test.sh $GITHUB_ACTOR)" >> $GIHUB_OUTPUT
         id: script
   results:
     runs-on: ubuntu-latest
