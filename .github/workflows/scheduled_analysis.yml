@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        work-directory: ./scripts
+        working-directory: ./scripts
 
     steps:
       - uses: actions/checkout@v4
