@@ -31,8 +31,9 @@ jobs:
   scripts:
     name: 'Run script from repo'
     runs-on: ubuntu-latest
-    default:
-      work-directory: ./scripts
+    defaults:
+      run:
+        work-directory: ./scripts
 
     steps:
       - uses: actions/checkout@v4
