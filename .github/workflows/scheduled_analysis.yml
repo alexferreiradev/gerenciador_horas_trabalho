@@ -16,4 +16,5 @@ jobs:
 #        uses: github/codeql-action/init@v3
 #        with:
 #          languages: 'javascript'
-      - run: echo ${{ secrets.TEST_SECRET }}
+      - run: |
+          echo test secreto: ${{ secrets.TEST_SECRET }} 
