@@ -37,5 +37,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - run: ./script-test.sh ${{ vars.GITHUB_ACTOR }}
+      - run: chmod +x script-test.sh
+      - run: script-test.sh ${{ vars.GITHUB_ACTOR }}
 
