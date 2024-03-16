@@ -50,5 +50,8 @@ jobs:
       - run: echo "test-output='valor do output'" >> $GITHUB_OUTPUT
         id: set-value
       - run: echo "teste de passagem de valor entre steps:" ${{ steps.set-value.outputs.test-output }}
+      - run: echo "teste steps" >> $$GITHUB_OUTPUT
+        id: set-output
       - run: echo "teste de passagem de valor entre jobs:" ${{ needs.scripts.outputs.chave1 }}
+      - run: echo "teste de passagem de valor entre jobs:" ${{ steps.set-output.outputs }}
 
