@@ -34,10 +34,20 @@ jobs:
     defaults:
       run:
         working-directory: ./scripts
-
+    outputs:
+      chave1: ${{ steps.script.outputs }}
     steps:
       - uses: actions/checkout@v4
       - run: chmod +x script-test.sh
       - run: ./script-test.sh ${{ github.actor }}
-      - run: ./script-test.sh $GITHUB_ACTOR
+      - run: ./script-test.sh $GITHUB_ACTOR >> $GIHUB_OUTPUT
+        id: script
+  results:
+    needs:
+      - scripts
+    steps:
+      - run: echo "test-output='valor do output'" >> $GITHUB_OUTPUT
+        id: set-value
+      - run: echo "teste de passagem de valor entre steps:" ${{ steps.set-value.outputs.test-output }}
+      - run: echo "teste de passagem de valor entre jobs:" ${{ jobs.scripts.steps.script.test-output }}
 
