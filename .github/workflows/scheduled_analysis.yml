@@ -26,3 +26,4 @@ jobs:
           echo '::warning::secrete ' ${{ env.env_secret }}
       - if: ${{ cancelled() }}
         run: echo '::error::secrete not valid'
+      - run: echo ${{ steps[2].conclusion }}
