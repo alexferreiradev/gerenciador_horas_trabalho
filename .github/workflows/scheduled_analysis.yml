@@ -10,6 +10,8 @@ jobs:
   analyse:
     name: 'Analyse the code quality'
     runs-on: ubuntu-latest
+    env:
+      env_secret: ${{ secrets.test_secret }}
 
     steps:
 #      - name: 'Analysing code with CodeQL'
@@ -18,5 +20,5 @@ jobs:
 #          languages: 'javascript'
       - run: |
           echo test secreto: ${{ secrets.TEST_SECRET }}
-      - if: ${{ secrets.test_secret == 'valor secreto' }}
+      - if: ${{ env.env_secret == 'valor secreto' }}
         run: echo '::info::secrete ok'
