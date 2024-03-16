@@ -20,8 +20,9 @@ jobs:
 #          languages: 'javascript'
       - run: |
           echo test secreto: ${{ secrets.TEST_SECRET }}
-      - if: ${{ env.env_secret == 'valor secreto' }}
+      - if: ${{ env.env_secret == 'valor errado' }}
         run: |
           echo '::notice::secrete ok'
-          echo '::warning::secrete ok'
-          echo '::error::secrete validated'
+          echo '::warning::secrete ' ${{ env.env_secret }}
+      - if: ${{ !success() }}
+          echo '::error::secrete not valid'
