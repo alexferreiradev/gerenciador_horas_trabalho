@@ -21,4 +21,7 @@ jobs:
       - run: |
           echo test secreto: ${{ secrets.TEST_SECRET }}
       - if: ${{ env.env_secret == 'valor secreto' }}
-        run: echo '::info::secrete ok'
+        run: |
+          echo '::notice::secrete ok'
+          echo '::warning::secrete ok'
+          echo '::error::secrete validated'
