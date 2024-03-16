@@ -25,6 +25,6 @@ jobs:
         run: |
           echo '::notice::secrete ok'
           echo '::warning::secrete ' ${{ env.env_secret }}
-      - if: ${{ failure() }}
+      - if: ${{ steps.validate.conclusion == 'skipped' }}
         run: echo '::error::secrete not valid'
       - run: echo ${{ steps.validate.conclusion }}
