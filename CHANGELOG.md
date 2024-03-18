@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [1.0.x] - 2024-xx-xx
+### Added
+### Changed
+### Removed
+### Fixed
+- deploy workflow: commit message pattern to patch instead of path
+
+<details>
+  <summary>Versões anteriores</summary>
 
 ## [1.0.0] - 2024-03-10
 ### Added
@@ -18,10 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Campo sistema de lançamento: remoção de campo que não estava sendo utilizado. Ele é um campo raramente utilizado. Versões futuras vamos colocar em campos opcionais. 
 ### Fixed
 - Tempo de inicio: estava gerando erro ao editar.
-- Tarefa em novo lançamento: não tinha como limpar a tarefa selecionada. Agora será possível clicar no x e remover a tarefa selecionada.  
-
-<details>
-  <summary>Versões anteriores</summary>
+- Tarefa em novo lançamento: não tinha como limpar a tarefa selecionada. Agora será possível clicar no x e remover a tarefa selecionada.
   
 ## [0.5.1] - 2022-02-08
 ### Added
