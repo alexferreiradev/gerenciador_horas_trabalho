@@ -84,6 +84,7 @@ function Dashboard() {
     handleUpdateBH,
     handleExportJson,
     handleStartDay,
+    handleExportCSV,
   } = useFuncoes({
     setNewLancamento,
     setEditing,
@@ -158,9 +159,16 @@ function Dashboard() {
           <Hint hint='desbloquearTodos' />
         </button>
         <Button
+          style={{margin: '5px 0'}}
           icon={exportState.icon}
           onClick={() => handleExportJson()}
           content={exportState.label}
+        />
+        <Button
+          style={{margin: '5px 0'}}
+          icon={exportState.icon}
+          onClick={() => handleExportCSV(lancamentoList)}
+          content={'Exportar como CSV'}
         />
         <Button
           secondary
