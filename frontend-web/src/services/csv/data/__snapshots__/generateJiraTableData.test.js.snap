@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Gera lista de modelo jira 1`] = `
+Array [
+  Object {
+    "date": Object {
+      "col": "Date Started",
+      "value": "2022-01-01",
+    },
+    "description": Object {
+      "col": "Work Description",
+      "value": "- teste
+",
+    },
+    "key": Object {
+      "col": "Key",
+      "value": "os1",
+    },
+    "time": Object {
+      "col": "Time Spent (h)",
+      "value": 10,
+    },
+  },
+  Object {
+    "date": Object {
+      "col": "Date Started",
+      "value": "2022-01-01",
+    },
+    "description": Object {
+      "col": "Work Description",
+      "value": "- teste 2
+- teste 3
+",
+    },
+    "key": Object {
+      "col": "Key",
+      "value": "OS2",
+    },
+    "time": Object {
+      "col": "Time Spent (h)",
+      "value": 80,
+    },
+  },
+  Object {
+    "date": Object {
+      "col": "Date Started",
+      "value": "2022-01-01",
+    },
+    "description": Object {
+      "col": "Work Description",
+      "value": "- teste 4
+",
+    },
+    "key": Object {
+      "col": "Key",
+      "value": "OS3",
+    },
+    "time": Object {
+      "col": "Time Spent (h)",
+      "value": 40,
+    },
+  },
+]
+`;

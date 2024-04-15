@@ -7,6 +7,8 @@ import Constantes from './Constantes';
 import { convertMinutesToObj, formatHoraLancamento } from '../../util';
 import exportDaily from '../../services/exportDaily';
 import { changeFocusTo } from '../../util/jsUtil';
+import exportCSV from '../../services/csv/exportCsv';
+import generator from '../../services/csv/data/generateJiraTableData';
 
 export default function useFuncoes({
   setNewLancamento,
@@ -220,6 +222,16 @@ export default function useFuncoes({
     console.info('Inicio de exportação de JSON');
     setExportingJSON(true);
   }
+  
+  function handleExportCSV() {
+    console.info('Inicio de exportação de CSV');
+
+    try {
+      exportCSV(generator, lancamentoList);
+    } catch(e) {
+      toast.error(`Erro ao tentar exportar para CSV: ${e.message}`);
+    }
+  }
 
   return {
     handleCancelar,
@@ -233,5 +245,6 @@ export default function useFuncoes({
     handleUpdateBH,
     handleExportJson,
     handleStartDay,
+    handleExportCSV,
   };
 }

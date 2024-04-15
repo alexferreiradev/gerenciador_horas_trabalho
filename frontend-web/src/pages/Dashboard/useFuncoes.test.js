@@ -4,9 +4,12 @@ import exportDaily from '../../services/exportDaily';
 import { changeFocusTo } from '../../util/jsUtil';
 import * as clipboard from 'clipboard-polyfill/text';
 import Constantes from './Constantes';
+import exportCSV from '../../services/csv/exportCsv';
+import generator from '../../services/csv/data/generateJiraTableData';
 
 jest.mock('react-toastify');
 jest.mock('../../services/exportDaily');
+jest.mock('../../services/csv/exportCsv');
 jest.mock('clipboard-polyfill/text');
 jest.mock('../../util/jsUtil');
 
@@ -16,7 +19,7 @@ const setNewLancamento = jest.fn();
 const setEditing = jest.fn();
 const setOsSelected = jest.fn();
 const newLancamento = { ...Constantes.emptyLancamento };
-const { handleStartDay, handleEdit, handleCancelar, handleChangeOS } = useFuncoes({
+const { handleStartDay, handleEdit, handleCancelar, handleChangeOS, handleExportCSV } = useFuncoes({
     setConfirmStartDayShowing,
     setLancamentoList,
     setNewLancamento,
@@ -103,4 +106,20 @@ test('should set os when os in option is valid for changeOs', () => {
     expect(setNewLancamento).toHaveBeenCalledWith(expect.objectContaining({
         os: validOs
     }));
+});
+
+test('should export csv when export csv option is selected', () => {
+    const lancamentoList = [];
+    handleExportCSV(lancamentoList);
+
+    expect(exportCSV).toHaveBeenCalledWith(generator, lancamentoList);
+});
+
+test('should call toast when export csv throw error', () => {
+    const msg = "erro test";
+    exportCSV.mockImplementation(() => { throw new Error(msg) });
+
+    handleExportCSV([]);
+
+    expect(toast.error).toHaveBeenCalledWith(`Erro ao tentar exportar para CSV: ${msg}`);
 });

@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Exporta texto da daily com a lista com mais de uma os lancada 1`] = `
+"Key,Date Started,Time Spent (h),Work Description
+fakeKey,20220101T122100Z,120m,\\"workDesc fake\\"
+fakeKey,20220101T122100Z,120m,\\"workDesc fake\\"
+"
+`;
