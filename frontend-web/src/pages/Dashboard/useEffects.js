@@ -71,7 +71,14 @@ export default function useEffects({
       const lancamentoListJson = localStorage.getItem('lancamentos');
       const lancamentoListParsed = JSON.parse(lancamentoListJson);
       if (lancamentoListParsed && lancamentoListParsed.length > 0) {
-        setLancamentoList(lancamentoListParsed);
+        const lacamentoListFormatted = lancamentoListParsed.map(l => ({
+            ...l, 
+            hora: new Date(l.hora), 
+            intervalo: Number.parseInt(l.intervalo, 10),
+            // tarefaEvolutiva: new Boolean(l.tarefaEvolutiva),
+          })
+        );
+        setLancamentoList(lacamentoListFormatted);
       } else {
         const intervalo = 15;
         const { hora, minuto } = convertMinutesToObj(intervalo);
