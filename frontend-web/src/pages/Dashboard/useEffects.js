@@ -75,7 +75,6 @@ export default function useEffects({
             ...l, 
             hora: new Date(l.hora), 
             intervalo: Number.parseInt(l.intervalo, 10),
-            // tarefaEvolutiva: new Boolean(l.tarefaEvolutiva),
           })
         );
         setLancamentoList(lacamentoListFormatted);
