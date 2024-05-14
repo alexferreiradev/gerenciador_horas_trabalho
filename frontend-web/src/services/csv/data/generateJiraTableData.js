@@ -18,7 +18,7 @@ const jiraGenerator = function generateTableData(lancamentos) {
     return Object.keys(groups).reduce((acc, key) => {
         const actualGroup = groups[key];
         const totalMinutes = actualGroup.reduce((total, lancamento) => {
-            return total + lancamento.intervalo
+            return total + Number.parseInt(lancamento.intervalo, 10)
         }, 0);
         const workDescription = actualGroup.reduce((text, lancamento) => {
             return text + '- ' + lancamento.acao + '\n'
