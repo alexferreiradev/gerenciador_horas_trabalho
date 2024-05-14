@@ -6,18 +6,21 @@ import * as clipboard from 'clipboard-polyfill/text';
 import Constantes from './Constantes';
 import exportCSV from '../../services/csv/exportCsv';
 import generator from '../../services/csv/data/generateJiraTableData';
+import { updateTarefaCache } from '../../services/cache/index';
 
 jest.mock('react-toastify');
 jest.mock('../../services/exportDaily');
 jest.mock('../../services/csv/exportCsv');
 jest.mock('clipboard-polyfill/text');
 jest.mock('../../util/jsUtil');
+jest.mock('../../services/cache/index');
 
 const setConfirmStartDayShowing = jest.fn();
 const setLancamentoList = jest.fn();
 const setNewLancamento = jest.fn();
 const setEditing = jest.fn();
 const setOsSelected = jest.fn();
+const setTarefaList = jest.fn();
 const newLancamento = { ...Constantes.emptyLancamento };
 const { handleStartDay, handleEdit, handleCancelar, handleChangeOS, handleExportCSV } = useFuncoes({
     setConfirmStartDayShowing,
@@ -27,20 +30,33 @@ const { handleStartDay, handleEdit, handleCancelar, handleChangeOS, handleExport
     setOsSelected,
     lancamentoList: [],
     newLancamento,
+    tarefaList: [],
+    setTarefaList,
 });
 
 beforeEach(() => {
     jest.clearAllMocks()
 });
 
-test('call execute when confirm dialog is showing', () => {
-    handleStartDay(true)
+test('should call toast and update lancamento list when confirm dialog is showing for start day', () => {
+    handleStartDay(true);
 
     expect(setConfirmStartDayShowing).toHaveBeenCalled();
     expect(setLancamentoList).toHaveBeenCalled();
     expect(toast.success).toHaveBeenCalledWith("Seu dia começou e seus lançamentos anteriores foram exportados para área de transferência");
+});
+
+test('should call exportDaily when confirm dialog is showing for start day', () => {
+    handleStartDay(true);
+
     expect(exportDaily).toHaveBeenCalledWith([]);
     expect(clipboard.writeText).toHaveBeenCalledWith(undefined);
+});
+
+test('should call update tarefa cache when confirm dialog is showing for start day', () => {
+    handleStartDay(true);
+
+    expect(updateTarefaCache).toHaveBeenCalledWith([], setTarefaList, []);
 });
 
 test('set dialog to show when confirm dialog is not showing', () => {

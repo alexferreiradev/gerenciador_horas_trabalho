@@ -9,6 +9,7 @@ import exportDaily from '../../services/exportDaily';
 import { changeFocusTo } from '../../util/jsUtil';
 import exportCSV from '../../services/csv/exportCsv';
 import generator from '../../services/csv/data/generateJiraTableData';
+import { updateTarefaCache } from '../../services/cache';
 
 export default function useFuncoes({
   setNewLancamento,
@@ -18,10 +19,12 @@ export default function useFuncoes({
   lancamentoList,
   editing,
   osSelectList,
+  tarefaList,
   setIsAlterBHOpen,
   setTotalMinutesBH,
   setExportingJSON,
   setConfirmStartDayShowing,
+  setTarefaList,
 }) {
   function handleCancelar() {
     setNewLancamento(Constantes.emptyLancamento);
@@ -153,7 +156,9 @@ export default function useFuncoes({
   function executeStartDay() {
     const exportDailyText = exportDaily(lancamentoList)
     clipboard.writeText(exportDailyText);
-
+    
+    updateTarefaCache(tarefaList, setTarefaList, lancamentoList);
+    
     const intervalo = 15;
     const { hora, minuto } = convertMinutesToObj(intervalo);
     setLancamentoList([
