@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [1.0.x] - 2024-xx-xx
 ### Added
+- Tarefa Cache: Created a cache for lacamento list os key. The user can search by key part in the edit field.
 ### Changed
 ### Removed
 ### Fixed

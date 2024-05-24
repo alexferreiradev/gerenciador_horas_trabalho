@@ -16,6 +16,7 @@ export default function useMemos({
   exportingJSON,
   newLancamento,
   editing,
+  tarefaList,
 }) {
   const lancamentosFiltered = useMemo(() => {
     return filterLancamentosWithIntervalo(lancamentoList);
@@ -102,11 +103,13 @@ export default function useMemos({
   }, [lancamentosFiltered]);
 
   const osSelectList = useMemo(() => {
-    if (!osList) return [];
+    const tarefaListProcessed = tarefaList || [];
+    const osArray = Array.from(osList);
+    const newTarefaList = [...tarefaListProcessed, ...osArray.map(i => ({ key: i, description: 'From lancamentos', totalWithoutLancamento: 0}))];
     return (
-      [...osList].map((i) => ({ value: i, label: i, isFixed: true })) || []
+      newTarefaList.map((i) => ({ value: i.key, label: `${i.key} - ${i.description}`, isFixed: true })) || []
     );
-  }, [osList]);
+  }, [osList, tarefaList]);
 
   const totalOS = useMemo(() => {
     if (osList) {

@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should add tarefa only one time to cache when new key from lancamentoList with two lancamento from same key is not found in cache 1`] = `
+Array [
+  Array [
+    Object {
+      "description": "test2",
+      "key": "newOs",
+      "totalWithoutLancamento": 0,
+    },
+  ],
+]
+`;
+
+exports[`should add tarefa to cache when new key from lancamentoList is not found in cache 1`] = `
+Array [
+  Array [
+    Object {
+      "description": "test",
+      "key": "newOs",
+      "totalWithoutLancamento": 0,
+    },
+  ],
+]
+`;
+
+exports[`should do nothing when tarefaList dont need to be updated 1`] = `
+Array [
+  Array [
+    Object {
+      "key": "newOs",
+      "totalWithoutLancamento": 0,
+    },
+  ],
+]
+`;
+
+exports[`should remove tarefa from cache when totalWithoutLancamento is higher than 15 1`] = `
+Array [
+  Array [],
+]
+`;
+
+exports[`should update total when lancamentoList dont have lancamento from some key in tarefa cache 1`] = `
+Array [
+  Array [
+    Object {
+      "key": "oldOs",
+      "totalWithoutLancamento": 1,
+    },
+    Object {
+      "key": "newOs",
+      "totalWithoutLancamento": 0,
+    },
+  ],
+]
+`;

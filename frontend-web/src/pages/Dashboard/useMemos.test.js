@@ -31,6 +31,7 @@ test('return minutes formated when is not editing', () => {
         exportingJSON: false,
         newLancamento,
         editing: false,
+        tarefaList: [],
     });
 
     expect(horaFinalFormatted).toBe("13:30");
@@ -50,6 +51,7 @@ test('return minutes with newLancamento when is editing', () => {
         exportingJSON: false,
         newLancamento,
         editing: true,
+        tarefaList: [],
     });
 
     expect(horaFinalFormatted).toBe("13:25");
@@ -69,6 +71,7 @@ test('return minutes without newLancamento when intervalo is lower than zero', (
         exportingJSON: false,
         newLancamento,
         editing: false,
+        tarefaList: [],
     });
 
     expect(horaFinalFormatted).toBe("13:20");
@@ -89,6 +92,7 @@ test('throw error when is editing and index not found', () => {
             exportingJSON: false,
             newLancamento,
             editing: true,
+            tarefaList: [],
         });
     }).toThrow('Lancamento invalido');
 });
@@ -100,6 +104,7 @@ test('should return os selected when new lancamento has os selected', () => {
     const { osSelected: osMemo  } = useMemos({
         ...baseMemoOptions,
         newLancamento,
+        tarefaList: [],
     });
     expect(osMemo).toStrictEqual({value: osSelected, label: osSelected});
 });
@@ -110,6 +115,41 @@ test('should return empty os when there is no os selected on new lancamento', ()
     const { osSelected: osMemo  } = useMemos({
         ...baseMemoOptions,
         newLancamento,
+        tarefaList: [],
     });
     expect(osMemo).toBe(null);
+});
+
+test('should return empty os when there is no os selected or tarefa list from cache', () => { 
+    const newLancamento = {...Constantes.emptyLancamento};
+
+    const { osSelectList: osMemo  } = useMemos({
+        ...baseMemoOptions,
+        newLancamento,
+        tarefaList: undefined,
+    });
+    expect(osMemo).toStrictEqual([]);
+});
+
+test('should return memo with tarefa list when there is tarefa from cache and tarefa from lancamentos', () => { 
+    const newLancamento = {...Constantes.emptyLancamento};
+    const lancamentoExample = {...Constantes.emptyLancamento, os: '12', intervalo: 10, id: 1};
+    const lancamentoList = [lancamentoExample, lancamentoExample];
+    const tarefaExample = { key: '123', description: 'desc', totalWithoutLancamento: 0};
+    const tarefaList = [tarefaExample, tarefaExample];
+
+    const { osSelectList: osMemo  } = useMemos({
+        lancamentoList,
+        horaInicio,
+        totalMinutesBH: 0,
+        currentTime: new Date(),
+        exportingJSON: false,
+        newLancamento,
+        tarefaList,
+    });
+    expect(osMemo).toMatchSnapshot();
+    expect(osMemo[0].label).toBe('123 - desc');
+    const osFromLancamento = osMemo.filter(i=> i.label.match("From lancamento"));
+    expect(osFromLancamento.length).toBe(1);
+    expect(osFromLancamento[0].label).toBe('12 - From lancamentos');
 });
