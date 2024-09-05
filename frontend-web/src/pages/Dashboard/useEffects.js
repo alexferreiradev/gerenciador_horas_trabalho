@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { setHours, setMinutes, parseISO, formatISO } from 'date-fns';
 
 import { convertMinutesToObj, formatHoraLancamento } from '../../util';
@@ -16,6 +17,7 @@ export default function useEffects({
   setTotalMinutosBHInput,
   exportingJSON,
   setExportingJSON,
+  setTarefaList,
 }) {
   useEffect(() => {
     function saveInStorage() {
@@ -71,7 +73,13 @@ export default function useEffects({
       const lancamentoListJson = localStorage.getItem('lancamentos');
       const lancamentoListParsed = JSON.parse(lancamentoListJson);
       if (lancamentoListParsed && lancamentoListParsed.length > 0) {
-        setLancamentoList(lancamentoListParsed);
+        const lacamentoListFormatted = lancamentoListParsed.map(l => ({
+            ...l, 
+            hora: new Date(l.hora), 
+            intervalo: Number.parseInt(l.intervalo, 10),
+          })
+        );
+        setLancamentoList(lacamentoListFormatted);
       } else {
         const intervalo = 15;
         const { hora, minuto } = convertMinutesToObj(intervalo);
@@ -111,6 +119,17 @@ export default function useEffects({
       }
     }
 
+    function loadTarefaListFromStorage() {
+      const tarefaListJson = localStorage.getItem("tarefaList");
+      const tarefaList = JSON.parse(tarefaListJson);
+      if (!tarefaList || tarefaList.length <= 0) {
+        toast.warning('Nenhuma tarefa anterior foi carregada do cache');
+      } else {
+        toast.success('Tarefas foram carregadas do cache');
+        setTarefaList(tarefaList);
+      }
+    }
+
     function setupCurrentTimeUpdate() {
       setInterval(() => {
         setCurrentTime(new Date());
@@ -120,6 +139,7 @@ export default function useEffects({
     loadFromStorage();
     loadDataInicioFromStorage();
     loadTotalBHFromStorage();
+    loadTarefaListFromStorage();
     setupCurrentTimeUpdate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

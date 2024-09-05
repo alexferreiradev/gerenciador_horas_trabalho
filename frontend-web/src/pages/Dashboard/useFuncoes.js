@@ -7,6 +7,9 @@ import Constantes from './Constantes';
 import { convertMinutesToObj, formatHoraLancamento } from '../../util';
 import exportDaily from '../../services/exportDaily';
 import { changeFocusTo } from '../../util/jsUtil';
+import exportCSV from '../../services/csv/exportCsv';
+import generator from '../../services/csv/data/generateJiraTableData';
+import { updateTarefaCache } from '../../services/cache';
 
 export default function useFuncoes({
   setNewLancamento,
@@ -16,10 +19,12 @@ export default function useFuncoes({
   lancamentoList,
   editing,
   osSelectList,
+  tarefaList,
   setIsAlterBHOpen,
   setTotalMinutesBH,
   setExportingJSON,
   setConfirmStartDayShowing,
+  setTarefaList,
 }) {
   function handleCancelar() {
     setNewLancamento(Constantes.emptyLancamento);
@@ -151,7 +156,9 @@ export default function useFuncoes({
   function executeStartDay() {
     const exportDailyText = exportDaily(lancamentoList)
     clipboard.writeText(exportDailyText);
-
+    
+    updateTarefaCache(tarefaList, setTarefaList, lancamentoList);
+    
     const intervalo = 15;
     const { hora, minuto } = convertMinutesToObj(intervalo);
     setLancamentoList([
@@ -220,6 +227,16 @@ export default function useFuncoes({
     console.info('Inicio de exportação de JSON');
     setExportingJSON(true);
   }
+  
+  function handleExportCSV() {
+    console.info('Inicio de exportação de CSV');
+
+    try {
+      exportCSV(generator, lancamentoList);
+    } catch(e) {
+      toast.error(`Erro ao tentar exportar para CSV: ${e.message}`);
+    }
+  }
 
   return {
     handleCancelar,
@@ -233,5 +250,6 @@ export default function useFuncoes({
     handleUpdateBH,
     handleExportJson,
     handleStartDay,
+    handleExportCSV,
   };
 }

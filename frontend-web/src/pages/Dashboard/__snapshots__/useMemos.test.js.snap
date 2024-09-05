@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should return memo with tarefa list when there is tarefa from cache and tarefa from lancamentos 1`] = `
+Array [
+  Object {
+    "isFixed": true,
+    "label": "123 - desc",
+    "value": "123",
+  },
+  Object {
+    "isFixed": true,
+    "label": "123 - desc",
+    "value": "123",
+  },
+  Object {
+    "isFixed": true,
+    "label": "12 - From lancamentos",
+    "value": "12",
+  },
+]
+`;

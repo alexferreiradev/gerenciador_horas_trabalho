@@ -4,19 +4,25 @@ import exportDaily from '../../services/exportDaily';
 import { changeFocusTo } from '../../util/jsUtil';
 import * as clipboard from 'clipboard-polyfill/text';
 import Constantes from './Constantes';
+import exportCSV from '../../services/csv/exportCsv';
+import generator from '../../services/csv/data/generateJiraTableData';
+import { updateTarefaCache } from '../../services/cache/index';
 
 jest.mock('react-toastify');
 jest.mock('../../services/exportDaily');
+jest.mock('../../services/csv/exportCsv');
 jest.mock('clipboard-polyfill/text');
 jest.mock('../../util/jsUtil');
+jest.mock('../../services/cache/index');
 
 const setConfirmStartDayShowing = jest.fn();
 const setLancamentoList = jest.fn();
 const setNewLancamento = jest.fn();
 const setEditing = jest.fn();
 const setOsSelected = jest.fn();
+const setTarefaList = jest.fn();
 const newLancamento = { ...Constantes.emptyLancamento };
-const { handleStartDay, handleEdit, handleCancelar, handleChangeOS } = useFuncoes({
+const { handleStartDay, handleEdit, handleCancelar, handleChangeOS, handleExportCSV } = useFuncoes({
     setConfirmStartDayShowing,
     setLancamentoList,
     setNewLancamento,
@@ -24,20 +30,33 @@ const { handleStartDay, handleEdit, handleCancelar, handleChangeOS } = useFuncoe
     setOsSelected,
     lancamentoList: [],
     newLancamento,
+    tarefaList: [],
+    setTarefaList,
 });
 
 beforeEach(() => {
     jest.clearAllMocks()
 });
 
-test('call execute when confirm dialog is showing', () => {
-    handleStartDay(true)
+test('should call toast and update lancamento list when confirm dialog is showing for start day', () => {
+    handleStartDay(true);
 
     expect(setConfirmStartDayShowing).toHaveBeenCalled();
     expect(setLancamentoList).toHaveBeenCalled();
     expect(toast.success).toHaveBeenCalledWith("Seu dia começou e seus lançamentos anteriores foram exportados para área de transferência");
+});
+
+test('should call exportDaily when confirm dialog is showing for start day', () => {
+    handleStartDay(true);
+
     expect(exportDaily).toHaveBeenCalledWith([]);
     expect(clipboard.writeText).toHaveBeenCalledWith(undefined);
+});
+
+test('should call update tarefa cache when confirm dialog is showing for start day', () => {
+    handleStartDay(true);
+
+    expect(updateTarefaCache).toHaveBeenCalledWith([], setTarefaList, []);
 });
 
 test('set dialog to show when confirm dialog is not showing', () => {
@@ -103,4 +122,20 @@ test('should set os when os in option is valid for changeOs', () => {
     expect(setNewLancamento).toHaveBeenCalledWith(expect.objectContaining({
         os: validOs
     }));
+});
+
+test('should export csv when export csv option is selected', () => {
+    const lancamentoList = [];
+    handleExportCSV(lancamentoList);
+
+    expect(exportCSV).toHaveBeenCalledWith(generator, lancamentoList);
+});
+
+test('should call toast when export csv throw error', () => {
+    const msg = "erro test";
+    exportCSV.mockImplementation(() => { throw new Error(msg) });
+
+    handleExportCSV([]);
+
+    expect(toast.error).toHaveBeenCalledWith(`Erro ao tentar exportar para CSV: ${msg}`);
 });

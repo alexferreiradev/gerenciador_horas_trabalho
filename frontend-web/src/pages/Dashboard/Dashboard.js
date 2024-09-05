@@ -21,6 +21,7 @@ import Hint from '../../components/Hint';
 
 function Dashboard() {
   const [lancamentoList, setLancamentoList] = useState([]);
+  const [tarefaList, setTarefaList] = useState([]);
   const [newLancamento, setNewLancamento] = useState(
     Constantes.emptyLancamento
   );
@@ -49,6 +50,7 @@ function Dashboard() {
     setTotalMinutosBHInput,
     exportingJSON,
     setExportingJSON,
+    setTarefaList,
   });
 
   const {
@@ -70,6 +72,7 @@ function Dashboard() {
     exportingJSON,
     newLancamento,
     editing,
+    tarefaList,
   });
 
   const {
@@ -84,6 +87,7 @@ function Dashboard() {
     handleUpdateBH,
     handleExportJson,
     handleStartDay,
+    handleExportCSV,
   } = useFuncoes({
     setNewLancamento,
     setEditing,
@@ -92,10 +96,12 @@ function Dashboard() {
     lancamentoList,
     editing,
     osSelectList,
+    tarefaList,
     setIsAlterBHOpen,
     setTotalMinutesBH,
     setExportingJSON,
     setConfirmStartDayShowing,
+    setTarefaList,
   });
 
   return (
@@ -158,9 +164,16 @@ function Dashboard() {
           <Hint hint='desbloquearTodos' />
         </button>
         <Button
+          style={{margin: '5px 0'}}
           icon={exportState.icon}
           onClick={() => handleExportJson()}
           content={exportState.label}
+        />
+        <Button
+          style={{margin: '5px 0'}}
+          icon={exportState.icon}
+          onClick={() => handleExportCSV(lancamentoList)}
+          content={'Exportar como CSV'}
         />
         <Button
           secondary
