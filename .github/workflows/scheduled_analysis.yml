@@ -1,6 +1,10 @@
 on:
   schedule:
     - cron: '5 * * * *'
+  workflow_dispatch:
+  pull_request:
+    types: [opened]
+  push:
 
 jobs:
   analyse:
@@ -9,6 +13,6 @@ jobs:
 
     steps:
       - name: 'Analysing code with CodeQL'
-        uses: actions/codeql-action@v3
+        uses: github/codeql-action/init@v3
         with:
           languages: 'javascript'
